@@ -54,7 +54,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten']['namen'],
 				'href'                => 'table=tl_kaderlisten_namen',
-				'icon'                => 'system/modules/kaderlisten/assets/images/players.png',
+				'icon'                => 'bundles/contaokaderlisten/images/players.png',
 			),
 			'all' => array
 			(
@@ -110,7 +110,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{title_legend},year,title;{options_legend},type,fromDate,toDate;{page_legend},page;{publish_legend},published'
+		'default'                     => '{title_legend},year,title;{options_legend},type,fromDate,toDate,dwzSuffix,eloSuffix;{page_legend},page;{publish_legend},published'
 	),
 
 	// Fields
@@ -139,7 +139,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255),
+			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'type' => array
@@ -174,6 +174,24 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 			'inputType'               => 'text',
 			'eval'                    => array('rgxp'=>'date', 'doNotCopy'=>true, 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
+		),
+		'dwzSuffix' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten']['dwzSuffix'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>8, 'tl_class'=>'w50'),
+			'sql'                     => "varchar(8) NOT NULL default ''"
+		),
+		'eloSuffix' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten']['eloSuffix'],
+			'exclude'                 => true,
+			'search'                  => true,
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>8, 'tl_class'=>'w50'),
+			'sql'                     => "varchar(8) NOT NULL default ''"
 		),
 		'page' => array
 		(
@@ -224,7 +242,7 @@ class tl_kaderlisten extends Backend
 	}
 
 	/**
-	 * Ändert das Aussehen des Toggle-Buttons.
+	 * Ã„ndert das Aussehen des Toggle-Buttons.
 	 * @param $row
 	 * @param $href
 	 * @param $label

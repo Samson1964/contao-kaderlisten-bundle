@@ -11,7 +11,7 @@
  * @copyright Frank Hoppe 2014
  */
 
-$GLOBALS['BE_MOD']['dsb']['kaderlisten'] = array
+$GLOBALS['BE_MOD']['content']['kaderlisten'] = array
 (
 	'tables'         => array('tl_kaderlisten', 'tl_kaderlisten_items', 'tl_kaderlisten_namen'),
 	'icon'           => 'bundles/contaokaderlisten/images/icon_16.png',

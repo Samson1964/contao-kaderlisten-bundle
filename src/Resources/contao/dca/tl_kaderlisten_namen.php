@@ -53,7 +53,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['kaderlisten'],
 				'href'                => 'table=tl_kaderlisten',
-				'icon'                => 'system/modules/kaderlisten/assets/images/icon_16.png',
+				'icon'                => 'bundles/contaokaderlisten/images/icon_16.png',
 			),  
 			'all' => array
 			(
@@ -155,7 +155,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 			),
 			'sql'                     => "int(4) unsigned NOT NULL default '0'"
 		),  
-		// Gibt die Kaderzugehörigkeiten aus
+		// Gibt die KaderzugehÃ¶rigkeiten aus
 		'kader' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['kader'],
@@ -278,7 +278,7 @@ class tl_kaderlisten_namen extends Backend
 	}
 
 	/**
-	 * Ändert das Aussehen des Toggle-Buttons.
+	 * Ã„ndert das Aussehen des Toggle-Buttons.
 	 * @param $row
 	 * @param $href
 	 * @param $label

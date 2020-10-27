@@ -145,6 +145,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'inputType'               => 'select',
 			'eval'                    => array
 			(
+				'includeBlankOption'  => true,
 				'mandatory'           => false,
 				'multiple'            => false,
 				'chosen'              => true,
@@ -291,9 +292,10 @@ class tl_kaderlisten_items extends Backend
 	{
 		$array = array();
 		$objRegister = $this->Database->prepare("SELECT * FROM tl_kaderlisten_namen ORDER BY lastname,firstname ASC ")->execute();
-		$array[0] = '-';
+		$array = array();
 		while($objRegister->next())
 		{
+			//$array[] = array($objRegister->id => $objRegister->firstname.' '.$objRegister->lastname.' ('.$objRegister->birthyear.')');
 			$array[$objRegister->id] = $objRegister->firstname.' '.$objRegister->lastname.' ('.$objRegister->birthyear.')';
 		}
 		return $array;

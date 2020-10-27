@@ -98,6 +98,11 @@ class Kaderliste extends \ContentElement
 			}
 		}
 
+		$this->Template->head = array
+		(
+			'dwzSuffix' => $objListen->dwzSuffix ? ' '.$objListen->dwzSuffix : '',
+			'eloSuffix' => $objListen->eloSuffix ? ' '.$objListen->eloSuffix : ''
+		);
 		$this->Template->headline = $this->headline;
 		$this->Template->liste = $liste;
 		return;

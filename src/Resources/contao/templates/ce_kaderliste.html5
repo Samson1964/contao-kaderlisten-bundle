@@ -10,8 +10,8 @@
 		<th>Name</th>
 		<th>Jg.</th>
 		<th>LV</th>
-		<th>Elo</th>
-		<th>DWZ</th>
+		<th>Elo<?= $this->head['eloSuffix'] ?></th>
+		<th>DWZ<?= $this->head['dwzSuffix'] ?></th>
 		<th>davor</th>
 	</tr>
 	<?php foreach($this->liste as $item): ?>

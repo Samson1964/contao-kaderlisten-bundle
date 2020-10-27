@@ -25,6 +25,8 @@ $GLOBALS['TL_LANG']['tl_kaderlisten']['options_legend'] = 'Zusätzliche Angaben'
 $GLOBALS['TL_LANG']['tl_kaderlisten']['type'] = array('Art', 'Art der Kaderliste');
 $GLOBALS['TL_LANG']['tl_kaderlisten']['fromDate'] = array('Gültig vom', 'Kaderliste gültig vom TT.MM.JJJJ');
 $GLOBALS['TL_LANG']['tl_kaderlisten']['toDate'] = array('Gültig bis', 'Kaderliste gültig bis TT.MM.JJJJ');
+$GLOBALS['TL_LANG']['tl_kaderlisten']['dwzSuffix'] = array('DWZ-Suffix', 'Text in der Kopfspalte hinter DWZ ..., z.B. 12/2000');
+$GLOBALS['TL_LANG']['tl_kaderlisten']['eloSuffix'] = array('Elo-Suffix', 'Text in der Kopfspalte hinter Elo ..., z.B. 12/2000');
 
 $GLOBALS['TL_LANG']['tl_kaderlisten']['page_legend'] = 'Ausgabeseite';
 $GLOBALS['TL_LANG']['tl_kaderlisten']['page'] = array('Ausgabeseite wählen', 'Ausgabeseite der Liste festlegen (für Navigation zwischen den Listen)');
