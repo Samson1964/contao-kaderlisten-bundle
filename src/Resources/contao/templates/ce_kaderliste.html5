@@ -1,0 +1,32 @@
+<?php $this->extend('block_unsearchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<table>
+	<tr>
+		<th>Kader</th>
+		<th>Nr.</th>
+		<th>Titel</th>
+		<th>Name</th>
+		<th>Jg.</th>
+		<th>LV</th>
+		<th>Elo</th>
+		<th>DWZ</th>
+		<th>davor</th>
+	</tr>
+	<?php foreach($this->liste as $item): ?>
+	<tr>
+		<td><?= $item['kader'] ?></td>
+		<td><?= $item['nummer'] ?></td>
+		<td><?= $item['fidetitel'] ?></td>
+		<td><?php if($item['url']): ?><a href="<?= $item['url'] ?>"><?= $item['name'] ?></a><?php else: ?><?= $item['name'] ?><?php endif; ?></td>
+		<td><?= $item['jahrgang'] ?></td>
+		<td><?= $item['landesverband'] ?></td>
+		<td><?= $item['elo'] ?></td>
+		<td><?= $item['dwz'] ?></td>
+		<td><?= $item['vorjahr'] ?></td>
+	</tr>
+	<?php endforeach; ?>
+</table>
+
+<?php $this->endblock(); ?>
