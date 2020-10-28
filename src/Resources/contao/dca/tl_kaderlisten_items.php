@@ -124,6 +124,8 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 		'type' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['type'],
+			'sorting'                 => true,
+			'flag'                    => 11,
 			'inputType'               => 'select',
 			'options'                 => array('A', 'B', 'C', 'DC'),
 			'reference'               => $GLOBALS['TL_LANG']['tl_kaderlisten_items']['type_lang'],
@@ -133,6 +135,8 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 		'nummer' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['nummer'],
+			'sorting'                 => true,
+			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array('rgxp'=>'digit', 'maxlength'=>3, 'tl_class'=>'w50'),
 			'sql'                     => "int(3) unsigned NOT NULL default '0'"
@@ -160,7 +164,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 1,
+			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
@@ -171,7 +175,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 1,
+			'flag'                    => 11,
 			'inputType'               => 'text',
 			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
@@ -182,8 +186,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'exclude'                 => true,
 			'default'                 => '',
 			'inputType'               => 'select',
-			'options'                 => array('BA', 'BY', 'BE', 'BB', 'HB', 'HH', 'HE', 'MV', 'NI', 'NW', 'RP', 'SL', 'SN', 'ST', 'SH', 'TH', 'WB'),
-			'reference'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['landesverband_list'],
+			'options'                 => $GLOBALS['TL_LANG']['kaderlisten_landesverbaende'],
 			'eval'                    => array
 			(
 				'tl_class'            => 'w50',
@@ -278,13 +281,18 @@ class tl_kaderlisten_items extends Backend
 	{
 		$temp = '<div class="tl_content_left"><b>'.$arrRow['type'].'</b>';
 		$temp .= ' <b>'.$arrRow['nummer'].'</b>';
+		if($arrRow['nachname']) $temp .= ' - '.$arrRow['nachname'].','.$arrRow['vorname'];
+		else $temp .= ' ---';
 		if($arrRow['name_id'])
 		{
 			$objRegister = $this->Database->prepare("SELECT * FROM tl_kaderlisten_namen WHERE id=?")->execute($arrRow['name_id']);
-			$temp .= ' - '.$objRegister->lastname.','.$objRegister->firstname;
+			if($objRegister->lastname == $arrRow['nachname'] && $objRegister->firstname == $arrRow['vorname'])
+				$temp .= ' (<img src="bundles/contaokaderlisten/images/check.png" width="12"> '.$objRegister->lastname.','.$objRegister->firstname.' zugeordnet)';
+			else
+				$temp .= ' (<img src="bundles/contaokaderlisten/images/remove.png" width="12"> '.$objRegister->lastname.','.$objRegister->firstname.' zugeordnet)';
 		}
-		elseif($arrRow['nachname']) $temp .= ' - '.$arrRow['nachname'].','.$arrRow['vorname'];
-		else $temp .= ' - unbekannt -';
+		else
+			$temp .= ' (<img src="bundles/contaokaderlisten/images/remove.png" width="12"> niemand zugeordnet)';
 		return $temp.'</div>';
 	}
 
@@ -303,7 +311,7 @@ class tl_kaderlisten_items extends Backend
 	}
 
 	/**
-	 * Ändert das Aussehen des Toggle-Buttons.
+	 * Ã„ndert das Aussehen des Toggle-Buttons.
 	 * @param $row
 	 * @param $href
 	 * @param $label

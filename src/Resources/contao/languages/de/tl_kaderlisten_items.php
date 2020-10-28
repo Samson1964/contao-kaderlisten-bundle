@@ -34,6 +34,9 @@ $GLOBALS['TL_LANG']['tl_kaderlisten_items']['dwz'] = array('DWZ', 'DWZ des Spiel
 $GLOBALS['TL_LANG']['tl_kaderlisten_items']['elo'] = array('FIDE-Elo', 'FIDE-Elo des Spielers, 0/leer = ohne Elo');
 $GLOBALS['TL_LANG']['tl_kaderlisten_items']['fidetitel'] = array('FIDE-Titel', 'FIDE-Titel des Spielers');
 
+$GLOBALS['TL_LANG']['tl_kaderlisten_items']['comment_legend'] = 'Intern';
+$GLOBALS['TL_LANG']['tl_kaderlisten_items']['comment'] = array('Kommentar', 'Interner Kommentar');
+
 $GLOBALS['TL_LANG']['tl_kaderlisten_items']['publish_legend'] = 'Veröffentlichung';
 $GLOBALS['TL_LANG']['tl_kaderlisten_items']['published'] = array('Veröffentlicht', 'Spieler ist veröffentlicht');
 
@@ -45,26 +48,7 @@ $GLOBALS['TL_LANG']['tl_kaderlisten_items']['type_lang'] = array
 	'C'   => 'C-Kader',
 	'DC'  => 'DC-Kader'
 );
-$GLOBALS['TL_LANG']['tl_kaderlisten_items']['landesverband_list'] = array
-(
-	'BA'  => 'Baden',
-	'BY'  => 'Bayern',
-	'BE'  => 'Berlin',
-	'BB'  => 'Brandenburg',
-	'HB'  => 'Bremen',
-	'HH'  => 'Hamburg',
-	'HE'  => 'Hessen',
-	'MV'  => 'Mecklenburg-Vorpommern',
-	'NI'  => 'Niedersachsen',
-	'NW'  => 'Nordrhein-Westfalen',
-	'RP'  => 'Rheinland-Pfalz',
-	'SL'  => 'Saarland',
-	'SN'  => 'Sachsen',
-	'ST'  => 'Sachsen-Anhalt',
-	'SH'  => 'Schleswig-Holstein',
-	'TH'  => 'Thüringen',
-	'WB'  => 'Württemberg'
-);
+
 $GLOBALS['TL_LANG']['tl_kaderlisten_items']['fidetitel_list'] = array
 (
 	'CM'  => 'CM - Kandidatenmeister',

@@ -15,13 +15,14 @@
 		<th>davor</th>
 	</tr>
 	<?php foreach($this->liste as $item): ?>
-	<tr>
+	<?php $class = $class == 'odd' ? 'even' : 'odd'; ?>
+	<tr class="<?= $class ?>">
 		<td><?= $item['kader'] ?></td>
 		<td><?= $item['nummer'] ?></td>
 		<td><?= $item['fidetitel'] ?></td>
 		<td><?php if($item['url']): ?><a href="<?= $item['url'] ?>"><?= $item['name'] ?></a><?php else: ?><?= $item['name'] ?><?php endif; ?></td>
 		<td><?= $item['jahrgang'] ?></td>
-		<td><?= $item['landesverband'] ?></td>
+		<td title="<?= $item['verband_lang'] ?>"><?= $item['verband_kurz'] ?></td>
 		<td><?= $item['elo'] ?></td>
 		<td><?= $item['dwz'] ?></td>
 		<td><?= $item['vorjahr'] ?></td>

@@ -54,7 +54,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['kaderlisten'],
 				'href'                => 'table=tl_kaderlisten',
 				'icon'                => 'bundles/contaokaderlisten/images/icon_16.png',
-			),  
+			),
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -89,7 +89,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['toggle'],
 				'icon'                => 'visible.gif',
 				'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-				'button_callback'     => array('tl_kaderlisten_namen', 'toggleIcon') 
+				'button_callback'     => array('tl_kaderlisten_namen', 'toggleIcon')
 			),
 			'show' => array
 			(
@@ -148,13 +148,13 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
-				'mandatory'           => false, 
+				'mandatory'           => false,
 				'maxlength'           => 4,
 				'tl_class'            => 'w50',
 				'rgxp'                => 'alnum'
 			),
 			'sql'                     => "int(4) unsigned NOT NULL default '0'"
-		),  
+		),
 		// Gibt die Kaderzugehörigkeiten aus
 		'kader' => array
 		(
@@ -165,17 +165,18 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['spielerregister_id'],
 			'exclude'                 => true,
-			'options_callback'        => array('tl_kaderlisten_namen', 'getRegisterliste'),
+			'options_callback'        => array('\Schachbulle\ContaoSpielerregisterBundle\Klassen\Helper', 'getRegister'),
 			'inputType'               => 'select',
 			'eval'                    => array
 			(
-				'mandatory'           => false, 
-				'multiple'            => false, 
+				'mandatory'           => false,
+				'multiple'            => false,
 				'chosen'              => true,
-				'submitOnChange'      => true,
+				'submitOnChange'      => false,
+				'includeBlankOption'  => true,
 				'tl_class'            => 'long'
 			),
-			'sql'                     => "int(10) unsigned NOT NULL default '0'" 
+			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
 		'published' => array
 		(
@@ -185,7 +186,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 			'inputType'               => 'checkbox',
 			'eval'                    => array('doNotCopy'=>true),
 			'sql'                     => "char(1) NOT NULL default ''"
-		), 
+		),
 	)
 );
 
@@ -202,7 +203,7 @@ class tl_kaderlisten_namen extends Backend
 {
 
 	var $nummer = 0;
-	
+
 	/**
 	 * Import the back end user object
 	 */
@@ -210,19 +211,6 @@ class tl_kaderlisten_namen extends Backend
 	{
 		parent::__construct();
 		$this->import('BackendUser', 'User');
-	}
-
-	public function getRegisterliste(DataContainer $dc)
-	{
-		$array = array();
-		$objRegister = $this->Database->prepare("SELECT * FROM tl_spielerregister ORDER BY surname1,firstname1 ASC ")->execute();
-		$array[0] = '-';
-		while($objRegister->next())
-		{
-			$array[$objRegister->id] = $objRegister->surname1 . ',' . $objRegister->firstname1;
-		}
-		return $array;
-
 	}
 
 	public function getKader(DataContainer $dc)
@@ -290,26 +278,26 @@ class tl_kaderlisten_namen extends Backend
 	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
 	{
 		$this->import('BackendUser', 'User');
-		
+
 		if (strlen($this->Input->get('tid')))
 		{
 			$this->toggleVisibility($this->Input->get('tid'), ($this->Input->get('state') == 0));
 			$this->redirect($this->getReferer());
 		}
-		
+
 		// Check permissions AFTER checking the tid, so hacking attempts are logged
 		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_kaderlisten_namen::published', 'alexf'))
 		{
 			return '';
 		}
-		
+
 		$href .= '&amp;id='.$this->Input->get('id').'&amp;tid='.$row['id'].'&amp;state='.$row[''];
-		
+
 		if (!$row['published'])
 		{
 			$icon = 'invisible.gif';
 		}
-		
+
 		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
 	}
 
@@ -326,9 +314,9 @@ class tl_kaderlisten_namen extends Backend
 			$this->log('Not enough permissions to show/hide record ID "'.$intId.'"', 'tl_kaderlisten_namen toggleVisibility', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
-		
+
 		$this->createInitialVersion('tl_kaderlisten_namen', $intId);
-		
+
 		// Trigger the save_callback
 		if (is_array($GLOBALS['TL_DCA']['tl_kaderlisten_namen']['fields']['published']['save_callback']))
 		{
@@ -338,11 +326,11 @@ class tl_kaderlisten_namen extends Backend
 				$blnPublished = $this->$callback[0]->$callback[1]($blnPublished, $this);
 			}
 		}
-		
+
 		// Update the database
 		$this->Database->prepare("UPDATE tl_kaderlisten_namen SET tstamp=". time() .", published='" . ($blnPublished ? '' : '1') . "' WHERE id=?")
 		               ->execute($intId);
 		$this->createNewVersion('tl_kaderlisten_namen', $intId);
 	}
- 
+
 }
