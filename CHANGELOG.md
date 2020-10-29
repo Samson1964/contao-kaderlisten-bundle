@@ -1,5 +1,17 @@
 # Kaderlisten Changelog
 
+## Version 1.2.0 (2019-10-29)
+
+* Add: Kaderliste BE - Bei inaktivem Spieler Zeile rot machen (funktioniert im Moment nur bei Reload)
+* Kaderlisten-Übersicht BE: Sortierung hinzugefügt auf/ab nach Jahr
+* Kaderlisten-Übersicht BE: von-bis-Spalten hinzugefügt
+* Frontend: Sortierung der Kaderliste nach Kadertyp ASC, Nummer ASC und jetzt zusätzlich nach ID ASC
+* Fix Registrierte Spieler: Kaderzugehörigkeiten CSS-Klasse widget ergänzt
+* Add: Ausgabe von FIDE-Titel, Elo und DWZ bei den Kaderzugehörigkeiten im Backend
+* Add Registrierte Spieler: Hinweisfeld hinzugefügt, z.B. bei Namensänderungen
+* Add Kaderspieler: Hinweisfeld hinzugefügt, z.B. bei Namensänderungen (für das Frontend)
+* Ausgabe des Hinweises aus der Kaderspielerliste im Frontend
+
 ## Version 1.1.0 (2019-10-28)
 
 * Fix Kadereingabe: Übersetzung comment fehlte

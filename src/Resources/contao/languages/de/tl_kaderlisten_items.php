@@ -34,7 +34,8 @@ $GLOBALS['TL_LANG']['tl_kaderlisten_items']['dwz'] = array('DWZ', 'DWZ des Spiel
 $GLOBALS['TL_LANG']['tl_kaderlisten_items']['elo'] = array('FIDE-Elo', 'FIDE-Elo des Spielers, 0/leer = ohne Elo');
 $GLOBALS['TL_LANG']['tl_kaderlisten_items']['fidetitel'] = array('FIDE-Titel', 'FIDE-Titel des Spielers');
 
-$GLOBALS['TL_LANG']['tl_kaderlisten_items']['comment_legend'] = 'Intern';
+$GLOBALS['TL_LANG']['tl_kaderlisten_items']['comment_legend'] = 'Informationen';
+$GLOBALS['TL_LANG']['tl_kaderlisten_items']['note'] = array('Hinweis', 'Hinweis für das Frontend');
 $GLOBALS['TL_LANG']['tl_kaderlisten_items']['comment'] = array('Kommentar', 'Interner Kommentar');
 
 $GLOBALS['TL_LANG']['tl_kaderlisten_items']['publish_legend'] = 'Veröffentlichung';

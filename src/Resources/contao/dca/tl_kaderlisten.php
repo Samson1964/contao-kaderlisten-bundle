@@ -41,11 +41,11 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 			'mode'                    => 1,
 			'fields'                  => array('year DESC', 'title ASC'),
 			'flag'                    => 1,
-			'panelLayout'             => 'filter;search,limit'
+			'panelLayout'             => 'filter;sort,search,limit'
 		),
 		'label' => array
 		(
-			'fields'                  => array('year', 'type', 'title'),
+			'fields'                  => array('year', 'type', 'title', 'fromDate', 'toDate'),
 			'showColumns'             => true,
 		),
 		'global_operations' => array
@@ -127,6 +127,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 		'year' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten']['year'],
+			'sorting'                 => true,
 			'flag'                    => 1,
 			'inputType'               => 'text',
 			'default'                 => date('Y'),
@@ -136,6 +137,8 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 		'title' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten']['title'],
+			'sorting'                 => true,
+			'flag'                    => 11,
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
@@ -145,6 +148,8 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 		'type' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten']['type'],
+			'sorting'                 => true,
+			'flag'                    => 11,
 			'inputType'               => 'radio',
 			'options'                 => array('m', 'w'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_kaderlisten']['type_lang'],

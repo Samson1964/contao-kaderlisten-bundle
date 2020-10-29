@@ -29,5 +29,8 @@ $GLOBALS['TL_LANG']['tl_kaderlisten_namen']['kader_legend'] = 'Kaderzugehörigke
 $GLOBALS['TL_LANG']['tl_kaderlisten_namen']['register_legend'] = 'Spielerregister';
 $GLOBALS['TL_LANG']['tl_kaderlisten_namen']['spielerregister_id'] = array('Eintrag im Spielerregister', 'Eintrag im Spielerregister');
 
+$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['comment_legend'] = 'Informationen';
+$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['note'] = array('Hinweis', 'Hinweis für das Frontend');
+
 $GLOBALS['TL_LANG']['tl_kaderlisten_namen']['publish_legend'] = 'Veröffentlichung';
 $GLOBALS['TL_LANG']['tl_kaderlisten_namen']['published'] = array('Veröffentlicht', 'Spieler ist veröffentlicht');

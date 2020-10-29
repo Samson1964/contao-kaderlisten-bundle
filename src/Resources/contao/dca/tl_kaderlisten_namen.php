@@ -103,7 +103,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{title_legend},firstname,lastname;{live_legend},birthyear;{kader_legend},kader;{register_legend},spielerregister_id;{publish_legend},published'
+		'default'                     => '{title_legend},firstname,lastname;{live_legend},birthyear;{kader_legend},kader;{register_legend},spielerregister_id;{comment_legend},note;{publish_legend},published'
 	),
 
 	// Fields
@@ -178,6 +178,13 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 			),
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
+		'note' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['note'],
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>255, 'tl_class'=>'long'),
+			'sql'                     => "varchar(255) NOT NULL default ''"
+		),
 		'published' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['published'],
@@ -232,15 +239,18 @@ class tl_kaderlisten_namen extends Backend
 
 		$spieler_id = $dc->activeRecord->id;
 
-		$objRegister = $this->Database->prepare("SELECT k.id AS listen_id, k.year, k.type, k.title, i.nachname, i.vorname, i.id AS item_id, i.type AS item_type FROM tl_kaderlisten_items AS i, tl_kaderlisten AS k WHERE i.pid = k.id AND i.name_id=?")->execute($spieler_id);
+		$objRegister = $this->Database->prepare("SELECT k.id AS listen_id, k.year, k.type, k.title, i.fidetitel, i.elo, i.dwz, i.nachname, i.vorname, i.id AS item_id, i.type AS item_type FROM tl_kaderlisten_items AS i, tl_kaderlisten AS k WHERE i.pid = k.id AND i.name_id=?")->execute($spieler_id);
 		//$ausgabe = '<div class="tl_listing_container list_view">';
-		$ausgabe = '<div class="long">'; // Wichtig damit das Auf- und Zuklappen funktioniert
+		$ausgabe = '<div class="long widget">'; // Wichtig damit das Auf- und Zuklappen funktioniert
 		$ausgabe .= '<table class="tl_listing showColumns">';
 		$ausgabe .= '<tbody><tr>';
 		$ausgabe .= '<th class="tl_folder_tlist">Kaderliste</th>';
 		$ausgabe .= '<th class="tl_folder_tlist">Listenname</th>';
 		$ausgabe .= '<th class="tl_folder_tlist">Kader</th>';
 		$ausgabe .= '<th class="tl_folder_tlist">Alternativer Name</th>';
+		$ausgabe .= '<th class="tl_folder_tlist">Titel</th>';
+		$ausgabe .= '<th class="tl_folder_tlist">Elo</th>';
+		$ausgabe .= '<th class="tl_folder_tlist">DWZ</th>';
 		$ausgabe .= '<th class="tl_folder_tlist tl_right_nowrap">&nbsp;</th>';
 		$ausgabe .= '</tr>';
 		$oddeven = 'odd';
@@ -253,6 +263,9 @@ class tl_kaderlisten_namen extends Backend
 			$ausgabe .= '<td class="tl_file_list">'.$objRegister->title.'</td>';
 			$ausgabe .= '<td class="tl_file_list">'.$objRegister->item_type.'</td>';
 			$ausgabe .= '<td class="tl_file_list">'.$objRegister->nachname . ',' . $objRegister->vorname.'</td>';
+			$ausgabe .= '<td class="tl_file_list">'.$objRegister->fidetitel.'</td>';
+			$ausgabe .= '<td class="tl_file_list">'.($objRegister->elo ? $objRegister->elo : '').'</td>';
+			$ausgabe .= '<td class="tl_file_list">'.($objRegister->dwz ? $objRegister->dwz : '').'</td>';
 			$ausgabe .= '<td class="tl_file_list tl_right_nowrap">';
 			$ausgabe .= '<a href="'.$linkprefix.'?do=kaderlisten&amp;table=tl_kaderlisten_items&amp;act=edit&amp;id='.$objRegister->item_id.'&amp;popup=1&amp;rt='.REQUEST_TOKEN.'" onclick="Backend.openModalIframe({\'width\':768,\'title\':\'Eintrag '.$objRegister->item_id.' in Kaderliste '.$liste.' bearbeiten\',\'url\':this.href});return false">'.$imageEdit.'</a>';
 			$ausgabe .= '<a href="'.$linkprefix.'?do=kaderlisten&amp;table=tl_kaderlisten&amp;act=edit&amp;id='.$objRegister->listen_id.'&amp;popup=1&amp;rt='.REQUEST_TOKEN.'" onclick="Backend.openModalIframe({\'width\':768,\'title\':\'Kaderliste '.$liste.' bearbeiten\',\'url\':this.href});return false">'.$imageEditHeader.'</a>';

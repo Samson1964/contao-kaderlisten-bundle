@@ -101,7 +101,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{type_legend},type,nummer;{listen_legend},name_id;{name_legend},vorname,nachname;{options_legend},landesverband,fidetitel,dwz,elo;{comment_legend},comment;{publish_legend},published'
+		'default'                     => '{type_legend},type,nummer;{listen_legend},name_id;{name_legend},vorname,nachname;{options_legend},landesverband,fidetitel,dwz,elo;{comment_legend},note,comment;{publish_legend},published'
 	),
 
 	// Fields
@@ -225,6 +225,13 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50', 'maxlength'=>4),
 			'sql'                     => "int(4) unsigned NOT NULL default '0'"
 		),
+		'note' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['note'],
+			'inputType'               => 'text',
+			'eval'                    => array('maxlength'=>255, 'tl_class'=>'long'),
+			'sql'                     => "varchar(255) NOT NULL default ''"
+		),
 		'comment' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['comment'],
@@ -279,8 +286,9 @@ class tl_kaderlisten_items extends Backend
 
 	public function listPersons($arrRow)
 	{
-		$temp = '<div class="tl_content_left"><b>'.$arrRow['type'].'</b>';
-		$temp .= ' <b>'.$arrRow['nummer'].'</b>';
+		$unpublished = $arrRow['published'] ? '' : 'color:#c33;';
+		$temp = '<div class="tl_content_left" style="'.$unpublished.'"><b style="'.$unpublished.'">'.$arrRow['type'].'</b>';
+		$temp .= ' <b style="'.$unpublished.'">'.$arrRow['nummer'].'</b>';
 		if($arrRow['nachname']) $temp .= ' - '.$arrRow['nachname'].','.$arrRow['vorname'];
 		else $temp .= ' ---';
 		if($arrRow['name_id'])

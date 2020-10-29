@@ -55,6 +55,8 @@ class Kaderliste extends \ContentElement
 		
 		// Einträge der Liste laden
 		$objListe = $this->Database->prepare("SELECT ki.type AS type,
+		                                             ki.id AS id,
+		                                             ki.note AS note,
 		                                             ki.nummer AS nummer,
 		                                             ki.vorname AS vorname_alt,
 		                                             ki.nachname AS nachname_alt,
@@ -73,6 +75,7 @@ class Kaderliste extends \ContentElement
 		                                            AND ki.published=?
 		                                      ORDER BY ki.type,
 		                                               ki.nummer,
+		                                               ki.id,
 		                                               ki.nachname,
 		                                               ki.vorname")
 		                           ->execute($this->kaderliste_id, 1);
@@ -91,6 +94,7 @@ class Kaderliste extends \ContentElement
 					'jahrgang'      => $objListe->jahrgang,
 					'verband_kurz'  => $objListe->landesverband,
 					'verband_lang'  => $GLOBALS['TL_LANG']['kaderlisten_landesverbaende'][$objListe->landesverband],
+					'hinweis'       => $objListe->note,
 					'fidetitel'     => $objListe->fidetitel,
 					'elo'           => $objListe->elo ? $objListe->elo : '',
 					'dwz'           => $objListe->dwz ? $objListe->dwz : '',

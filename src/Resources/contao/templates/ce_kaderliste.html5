@@ -20,7 +20,7 @@
 		<td><?= $item['kader'] ?></td>
 		<td><?= $item['nummer'] ?></td>
 		<td><?= $item['fidetitel'] ?></td>
-		<td><?php if($item['url']): ?><a href="<?= $item['url'] ?>"><?= $item['name'] ?></a><?php else: ?><?= $item['name'] ?><?php endif; ?></td>
+		<td><?php if($item['url']): ?><a href="<?= $item['url'] ?>"><?= $item['name'] ?></a><?php else: ?><?= $item['name'] ?><?php endif; ?><?php if($item['hinweis']): ?> (<?= $item['hinweis'] ?>)<? endif; ?></td>
 		<td><?= $item['jahrgang'] ?></td>
 		<td title="<?= $item['verband_lang'] ?>"><?= $item['verband_kurz'] ?></td>
 		<td><?= $item['elo'] ?></td>
