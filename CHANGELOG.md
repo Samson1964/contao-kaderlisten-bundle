@@ -1,5 +1,11 @@
 # Kaderlisten Changelog
 
+## Version 1.2.1 (2019-12-08)
+
+* Fix: Klasse Kaderliste.php von Classes nach ContentElements verschoben
+* Fix: Bei DWZ/Elo wurde die Suffix vom Vorjahr angezeigt
+* Change: tl_kaderlisten_items.vorname und tl_kaderlisten_items.nachname von 255 auf 40 Zeichen gekürzt
+
 ## Version 1.2.0 (2019-10-29)
 
 * Add: Kaderliste BE - Bei inaktivem Spieler Zeile rot machen (funktioniert im Moment nur bei Reload)

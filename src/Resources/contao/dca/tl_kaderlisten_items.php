@@ -23,6 +23,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 		'ptable'                      => 'tl_kaderlisten',
 		'switchToEdit'                => true,
 		'enableVersioning'            => true,
+		'onsubmit_callback'           => array(array('tl_kaderlisten_items', 'saveForm')),
 		'sql' => array
 		(
 			'keys' => array
@@ -87,7 +88,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['toggle'],
 				'icon'                => 'visible.gif',
 				'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-				'button_callback'     => array('tl_kaderlisten_items', 'toggleIcon') 
+				'button_callback'     => array('tl_kaderlisten_items', 'toggleIcon')
 			),
 			'show' => array
 			(
@@ -153,7 +154,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 				'mandatory'           => false,
 				'multiple'            => false,
 				'chosen'              => true,
-				'submitOnChange'      => false,
+				'submitOnChange'      => true,
 				'tl_class'            => 'long'
 			),
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
@@ -166,8 +167,13 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'sorting'                 => true,
 			'flag'                    => 11,
 			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
+			'load_callback'           => array(array('tl_kaderlisten_items','loadVorname')),
+			'eval'                    => array
+			(
+				'maxlength'           => 40, 
+				'tl_class'            => 'w50'
+			),
+			'sql'                     => "varchar(40) NOT NULL default ''"
 		),
 		'nachname' => array
 		(
@@ -177,8 +183,13 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'sorting'                 => true,
 			'flag'                    => 11,
 			'inputType'               => 'text',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
-			'sql'                     => "varchar(255) NOT NULL default ''"
+			'load_callback'           => array(array('tl_kaderlisten_items','loadNachname')),
+			'eval'                    => array
+			(
+				'maxlength'           => 40, 
+				'tl_class'            => 'w50'
+			),
+			'sql'                     => "varchar(40) NOT NULL default ''"
 		),
 		'landesverband' => array
 		(
@@ -286,6 +297,9 @@ class tl_kaderlisten_items extends Backend
 
 	public function listPersons($arrRow)
 	{
+		//echo "<pre>";
+		//print_r($arrRow);
+		//echo "</pre>";
 		$unpublished = $arrRow['published'] ? '' : 'color:#c33;';
 		$temp = '<div class="tl_content_left" style="'.$unpublished.'"><b style="'.$unpublished.'">'.$arrRow['type'].'</b>';
 		$temp .= ' <b style="'.$unpublished.'">'.$arrRow['nummer'].'</b>';
@@ -318,6 +332,45 @@ class tl_kaderlisten_items extends Backend
 
 	}
 
+	public function loadVorname($varValue, DataContainer $dc)
+	{
+		log_message('function loadVorname (Start) varValue = '.$varValue,'kaderlisten.log');
+		// Füllt Vorname aus, wenn leer und ein Spieler ausgewählt wurde
+		if($dc->activeRecord->name_id && !$varValue)
+		{
+			$objRegister = $this->Database->prepare("SELECT * FROM tl_kaderlisten_namen WHERE id = ?")
+			                              ->limit(1)
+			                              ->execute($dc->activeRecord->name_id);
+			$varValue = $objRegister->firstname;
+		}
+		
+		log_message('function loadVorname (Ende) varValue = '.$varValue,'kaderlisten.log');
+		return $varValue;
+	}
+
+	public function loadNachname($varValue, DataContainer $dc)
+	{
+		log_message('function loadNachname (Start) varValue = '.$varValue,'kaderlisten.log');
+		// Füllt Nachname aus, wenn leer und ein Spieler ausgewählt wurde
+		if($dc->activeRecord->name_id && !$varValue)
+		{
+			$objRegister = $this->Database->prepare("SELECT * FROM tl_kaderlisten_namen WHERE id = ?")  
+			                              ->limit(1)
+			                              ->execute($dc->activeRecord->name_id);
+			$varValue = $objRegister->lastname;
+		}
+		
+		log_message('function loadNachname (Ende) varValue = '.$varValue,'kaderlisten.log');
+		return $varValue;
+	}
+
+	public function saveForm(DataContainer $dc)
+	{
+		log_message('function saveForm','kaderlisten.log');
+		log_message(print_r($dc->activeRecord, true),'kaderlisten.log');
+		return;
+	}
+
 	/**
 	 * Ändert das Aussehen des Toggle-Buttons.
 	 * @param $row
@@ -331,26 +384,26 @@ class tl_kaderlisten_items extends Backend
 	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
 	{
 		$this->import('BackendUser', 'User');
-		
+
 		if (strlen($this->Input->get('tid')))
 		{
 			$this->toggleVisibility($this->Input->get('tid'), ($this->Input->get('state') == 0));
 			$this->redirect($this->getReferer());
 		}
-		
+
 		// Check permissions AFTER checking the tid, so hacking attempts are logged
 		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_kaderlisten_items::published', 'alexf'))
 		{
 			return '';
 		}
-		
+
 		$href .= '&amp;id='.$this->Input->get('id').'&amp;tid='.$row['id'].'&amp;state='.$row[''];
-		
+
 		if (!$row['published'])
 		{
 			$icon = 'invisible.gif';
 		}
-		
+
 		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
 	}
 
@@ -367,9 +420,9 @@ class tl_kaderlisten_items extends Backend
 			$this->log('Not enough permissions to show/hide record ID "'.$intId.'"', 'tl_kaderlisten_items toggleVisibility', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
-		
+
 		$this->createInitialVersion('tl_kaderlisten_items', $intId);
-		
+
 		// Trigger the save_callback
 		if (is_array($GLOBALS['TL_DCA']['tl_kaderlisten_items']['fields']['published']['save_callback']))
 		{
@@ -379,7 +432,7 @@ class tl_kaderlisten_items extends Backend
 				$blnPublished = $this->$callback[0]->$callback[1]($blnPublished, $this);
 			}
 		}
-		
+
 		// Update the database
 		$this->Database->prepare("UPDATE tl_kaderlisten_items SET tstamp=". time() .", published='" . ($blnPublished ? '' : '1') . "' WHERE id=?")
 		               ->execute($intId);

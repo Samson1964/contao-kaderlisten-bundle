@@ -22,4 +22,4 @@ $GLOBALS['BE_MOD']['content']['kaderlisten'] = array
  * CONTENT ELEMENTS
  * -------------------------------------------------------------------------
  */
-$GLOBALS['TL_CTE']['schach']['kaderlisten'] = 'Schachbulle\ContaoKaderlistenBundle\Classes\Kaderliste';
+$GLOBALS['TL_CTE']['schach']['kaderlisten'] = 'Schachbulle\ContaoKaderlistenBundle\ContentElements\Kaderliste';

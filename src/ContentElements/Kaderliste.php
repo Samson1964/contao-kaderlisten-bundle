@@ -1,6 +1,6 @@
 <?php
 
-namespace Schachbulle\ContaoKaderlistenBundle\Classes;
+namespace Schachbulle\ContaoKaderlistenBundle\ContentElements;
 
 class Kaderliste extends \ContentElement
 {
@@ -22,7 +22,7 @@ class Kaderliste extends \ContentElement
 		                            ->execute();
 		if($objListen)
 		{
-			$vorjahr = array(); // Enthält später die Spielerdaten der Vorjahresliste
+			$vorjahr = array(); // EnthÃ¤lt spÃ¤ter die Spielerdaten der Vorjahresliste
 			$liste_vorjahr = false;
 			$liste_typ = false;
 			while($objListen->next())
@@ -30,9 +30,12 @@ class Kaderliste extends \ContentElement
 				// Nach aktueller Liste suchen
 				if($objListen->id == $this->kaderliste_id)
 				{
-					// Liste gefunden, Parameter für vorhergehende Liste festlegen
+					// Liste gefunden, Parameter fÃ¼r vorhergehende Liste festlegen
 					$liste_vorjahr = $objListen->year - 1;
 					$liste_typ = $objListen->type;
+					// Suffixe sichern
+					$dwzSuffix = $objListen->dwzSuffix;
+					$eloSuffix = $objListen->eloSuffix;
 				}
 				// Nach Vorjahresliste suchen
 				if($liste_vorjahr == $objListen->year && $liste_typ == $objListen->type)
@@ -53,7 +56,7 @@ class Kaderliste extends \ContentElement
 			}
 		}
 		
-		// Einträge der Liste laden
+		// EintrÃ¤ge der Liste laden
 		$objListe = $this->Database->prepare("SELECT ki.type AS type,
 		                                             ki.id AS id,
 		                                             ki.note AS note,
@@ -105,8 +108,8 @@ class Kaderliste extends \ContentElement
 
 		$this->Template->head = array
 		(
-			'dwzSuffix' => $objListen->dwzSuffix ? ' '.$objListen->dwzSuffix : '',
-			'eloSuffix' => $objListen->eloSuffix ? ' '.$objListen->eloSuffix : ''
+			'dwzSuffix' => $dwzSuffix ? ' '.$dwzSuffix : '',
+			'eloSuffix' => $eloSuffix ? ' '.$eloSuffix : ''
 		);
 		$this->Template->headline = $this->headline;
 		$this->Template->liste = $liste;
