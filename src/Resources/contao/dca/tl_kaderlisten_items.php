@@ -168,9 +168,11 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'flag'                    => 11,
 			'inputType'               => 'text',
 			'load_callback'           => array(array('tl_kaderlisten_items','loadVorname')),
+			//'save_callback'           => array(array('tl_kaderlisten_items','saveVorname')),
 			'eval'                    => array
 			(
 				'maxlength'           => 40, 
+				'alwaysSave'          => true,
 				'tl_class'            => 'w50'
 			),
 			'sql'                     => "varchar(40) NOT NULL default ''"
@@ -184,9 +186,11 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'flag'                    => 11,
 			'inputType'               => 'text',
 			'load_callback'           => array(array('tl_kaderlisten_items','loadNachname')),
+			//'save_callback'           => array(array('tl_kaderlisten_items','saveNachname')),
 			'eval'                    => array
 			(
 				'maxlength'           => 40, 
+				'alwaysSave'          => true,
 				'tl_class'            => 'w50'
 			),
 			'sql'                     => "varchar(40) NOT NULL default ''"
@@ -334,9 +338,8 @@ class tl_kaderlisten_items extends Backend
 
 	public function loadVorname($varValue, DataContainer $dc)
 	{
-		log_message('function loadVorname (Start) varValue = '.$varValue,'kaderlisten.log');
 		// Füllt Vorname aus, wenn leer und ein Spieler ausgewählt wurde
-		if($dc->activeRecord->name_id && !$varValue)
+		if($dc->activeRecord->name_id && trim($varValue) == '')
 		{
 			$objRegister = $this->Database->prepare("SELECT * FROM tl_kaderlisten_namen WHERE id = ?")
 			                              ->limit(1)
@@ -344,24 +347,31 @@ class tl_kaderlisten_items extends Backend
 			$varValue = $objRegister->firstname;
 		}
 		
-		log_message('function loadVorname (Ende) varValue = '.$varValue,'kaderlisten.log');
 		return $varValue;
+	}
+
+	public function saveVorname($varValue, DataContainer $dc)
+	{
+		return $varValue.' ';
 	}
 
 	public function loadNachname($varValue, DataContainer $dc)
 	{
-		log_message('function loadNachname (Start) varValue = '.$varValue,'kaderlisten.log');
 		// Füllt Nachname aus, wenn leer und ein Spieler ausgewählt wurde
-		if($dc->activeRecord->name_id && !$varValue)
+		if($dc->activeRecord->name_id && trim($varValue) == '')
 		{
 			$objRegister = $this->Database->prepare("SELECT * FROM tl_kaderlisten_namen WHERE id = ?")  
 			                              ->limit(1)
 			                              ->execute($dc->activeRecord->name_id);
 			$varValue = $objRegister->lastname;
 		}
-		
-		log_message('function loadNachname (Ende) varValue = '.$varValue,'kaderlisten.log');
+
 		return $varValue;
+	}
+
+	public function saveNachname($varValue, DataContainer $dc)
+	{
+		return $varValue.' ';
 	}
 
 	public function saveForm(DataContainer $dc)
