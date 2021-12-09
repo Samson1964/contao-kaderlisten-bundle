@@ -1,5 +1,9 @@
 # Kaderlisten Changelog
 
+## Version 1.3.0 (2021-12-09)
+
+* Add: tl_content Möglichkeit die Spalten DWZ und Elo auszublenden
+
 ## Version 1.2.2 (2019-12-15)
 
 * Fix: load_callback in tl_kaderlisten_items.vorname und tl_kaderlisten_items.nachname hat Werte nicht abgespeichert - alwaysSave = true in eval war erforderlich

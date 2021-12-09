@@ -10,8 +10,8 @@
 		<th>Name</th>
 		<th>Jg.</th>
 		<th>LV</th>
-		<th>Elo<?= $this->head['eloSuffix'] ?></th>
-		<th>DWZ<?= $this->head['dwzSuffix'] ?></th>
+		<?php if($this->visibleElo): ?><th>Elo<?= $this->head['eloSuffix'] ?></th><?php endif; ?>
+		<?php if($this->visibleDWZ): ?><th>DWZ<?= $this->head['dwzSuffix'] ?></th><?php endif; ?>
 		<th>davor</th>
 	</tr>
 	<?php foreach($this->liste as $item): ?>
@@ -23,8 +23,8 @@
 		<td><?php if($item['url']): ?><a href="<?= $item['url'] ?>"><?= $item['name'] ?></a><?php else: ?><?= $item['name'] ?><?php endif; ?><?php if($item['hinweis']): ?> (<?= $item['hinweis'] ?>)<? endif; ?></td>
 		<td><?= $item['jahrgang'] ?></td>
 		<td title="<?= $item['verband_lang'] ?>"><?= $item['verband_kurz'] ?></td>
-		<td><?= $item['elo'] ?></td>
-		<td><?= $item['dwz'] ?></td>
+		<?php if($this->visibleElo): ?><td><?= $item['elo'] ?></td><?php endif; ?>
+		<?php if($this->visibleDWZ): ?><td><?= $item['dwz'] ?></td><?php endif; ?>
 		<td><?= $item['vorjahr'] ?></td>
 	</tr>
 	<?php endforeach; ?>

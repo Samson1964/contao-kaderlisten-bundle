@@ -111,6 +111,8 @@ class Kaderliste extends \ContentElement
 			'dwzSuffix' => $dwzSuffix ? ' '.$dwzSuffix : '',
 			'eloSuffix' => $eloSuffix ? ' '.$eloSuffix : ''
 		);
+		$this->Template->visibleElo = $this->kaderliste_invisibleElo ? false : true;
+		$this->Template->visibleDWZ = $this->kaderliste_invisibleDWZ ? false : true;
 		$this->Template->headline = $this->headline;
 		$this->Template->liste = $liste;
 		return;
