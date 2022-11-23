@@ -239,7 +239,8 @@ class tl_kaderlisten_namen extends Backend
 
 		$spieler_id = $dc->activeRecord->id;
 
-		$objRegister = $this->Database->prepare("SELECT k.id AS listen_id, k.year, k.type, k.title, i.fidetitel, i.elo, i.dwz, i.nachname, i.vorname, i.id AS item_id, i.type AS item_type FROM tl_kaderlisten_items AS i, tl_kaderlisten AS k WHERE i.pid = k.id AND i.name_id=?")->execute($spieler_id);
+		$objRegister = $this->Database->prepare("SELECT k.id AS listen_id, k.year, k.type, k.title, i.fidetitel, i.elo, i.dwz, i.nachname, i.vorname, i.id AS item_id, i.type AS item_type FROM tl_kaderlisten_items AS i, tl_kaderlisten AS k WHERE i.pid = k.id AND i.name_id=? ORDER BY k.year DESC")
+		                              ->execute($spieler_id);
 		//$ausgabe = '<div class="tl_listing_container list_view">';
 		$ausgabe = '<div class="long widget">'; // Wichtig damit das Auf- und Zuklappen funktioniert
 		$ausgabe .= '<table class="tl_listing showColumns">';

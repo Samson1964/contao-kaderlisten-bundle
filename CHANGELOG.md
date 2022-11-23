@@ -1,5 +1,9 @@
 # Kaderlisten Changelog
 
+## Version 1.3.1 (2022-11-23)
+
+* Fix: In den Spielerdetails werden die Kaderzugehörigkeiten falsch sortiert -> ORDER hat in SQL-Abfrage gefehlt
+
 ## Version 1.3.0 (2021-12-09)
 
 * Add: tl_content Möglichkeit die Spalten DWZ und Elo auszublenden
