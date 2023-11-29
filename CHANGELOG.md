@@ -1,5 +1,9 @@
 # Kaderlisten Changelog
 
+## Version 1.4.0 (2022-11-29)
+
+* Add: Freigabe für PHP 8
+
 ## Version 1.3.1 (2022-11-23)
 
 * Fix: In den Spielerdetails werden die Kaderzugehörigkeiten falsch sortiert -> ORDER hat in SQL-Abfrage gefehlt
