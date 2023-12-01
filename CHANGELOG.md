@@ -1,5 +1,12 @@
 # Kaderlisten Changelog
 
+## Version 1.4.1 (2022-12-01)
+
+* Change: Anpassungen PHP 8 wegen undefinierter Variablen
+* Add: Abhängigkeit codefog/contao-haste
+* Change: Toggle-Funktion durch Haste-Toggler ersetzt
+* Change: Verbesserungen in der Listenansicht der registrierten Spieler
+
 ## Version 1.4.0 (2022-11-29)
 
 * Add: Freigabe für PHP 8
