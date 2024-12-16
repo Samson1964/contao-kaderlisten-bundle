@@ -314,8 +314,10 @@ class tl_kaderlisten_items extends Backend
 		$unpublished = $arrRow['published'] ? '' : 'color:#c33;';
 		$temp = '<div class="tl_content_left" style="'.$unpublished.'"><b style="'.$unpublished.'">'.$arrRow['type'].'</b>';
 		$temp .= ' <b style="'.$unpublished.'">'.$arrRow['nummer'].'</b>';
+
 		if($arrRow['nachname']) $temp .= ' - '.$arrRow['nachname'].','.$arrRow['vorname'];
 		else $temp .= ' ---';
+
 		if($arrRow['name_id'])
 		{
 			$objRegister = $this->Database->prepare("SELECT * FROM tl_kaderlisten_namen WHERE id=?")->execute($arrRow['name_id']);
@@ -326,6 +328,12 @@ class tl_kaderlisten_items extends Backend
 		}
 		else
 			$temp .= ' (<img src="bundles/contaokaderlisten/images/remove.png" width="12"> niemand zugeordnet)';
+
+		// FIDE-Titel, Elo und DWZ ausgeben
+		if($arrRow['fidetitel']) $temp .= ' | <span>'.$arrRow['fidetitel'].'</span>';
+		if($arrRow['elo']) $temp .= ' |  <span>Elo '.$arrRow['elo'].'</span>';
+		if($arrRow['dwz']) $temp .= ' |  <span>DWZ '.$arrRow['dwz'].'</span>';
+
 		return $temp.'</div>';
 	}
 

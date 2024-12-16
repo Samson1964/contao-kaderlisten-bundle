@@ -1,5 +1,9 @@
 # Kaderlisten Changelog
 
+## Version 1.4.2 (2024-12-16)
+
+* Add: FIDE-Titel, DWZ und Elo in Kaderliste Backend anzeigen
+
 ## Version 1.4.1 (2022-12-01)
 
 * Change: Anpassungen PHP 8 wegen undefinierter Variablen
