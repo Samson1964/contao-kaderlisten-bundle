@@ -1,5 +1,12 @@
 # Kaderlisten Changelog
 
+## Version 1.4.3 (2024-12-20)
+
+* Add: tl_content.kaderlisten_stufen -> Nur bestimmte Kader ausgeben
+* Fix: Warning: Undefined variable $dwzSuffix in src/ContentElements/Kaderliste.php (line 111) 
+* Fix: Warning: Undefined array key 339 in src/ContentElements/Kaderliste.php (line 112) 
+* Fix: Warning: Undefined variable $class in src/Resources/contao/templates/ce_kaderliste.html5 (line 18) 
+
 ## Version 1.4.2 (2024-12-16)
 
 * Add: FIDE-Titel, DWZ und Elo in Kaderliste Backend anzeigen

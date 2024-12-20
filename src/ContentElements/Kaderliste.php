@@ -86,30 +86,39 @@ class Kaderliste extends \ContentElement
 		$liste = array();
 		if($objListe)
 		{
+			$kadertypen = unserialize($this->kaderliste_stufen);
+			if(count($kadertypen) == 0)
+			{
+				$kadertypen = array('A', 'B', 'C', 'DC');
+			}
+			
 			while($objListe->next())
 			{
-				$liste[] = array
-				(
-					'kader'         => $objListe->type,
-					'nummer'        => $objListe->nummer ? $objListe->nummer : '',
-					'url'           => '', //$this->addToUrl('kader='.$objListe->name_id),
-					'name'          => ($objListe->nachname_alt.$objListe->vorname_alt) ? $objListe->vorname_alt.' '.$objListe->nachname_alt : $objListe->vorname.' '.$objListe->nachname,
-					'jahrgang'      => $objListe->jahrgang,
-					'verband_kurz'  => $objListe->landesverband,
-					'verband_lang'  => $GLOBALS['TL_LANG']['kaderlisten_landesverbaende'][$objListe->landesverband],
-					'hinweis'       => $objListe->note,
-					'fidetitel'     => $objListe->fidetitel,
-					'elo'           => $objListe->elo ? $objListe->elo : '',
-					'dwz'           => $objListe->dwz ? $objListe->dwz : '',
-					'vorjahr'       => $vorjahr[$objListe->name_id] ? $vorjahr[$objListe->name_id] : 'neu'
-				);
+				if(in_array($objListe->type, $kadertypen))
+				{
+					$liste[] = array
+					(
+						'kader'         => $objListe->type,
+						'nummer'        => $objListe->nummer ? $objListe->nummer : '',
+						'url'           => '', //$this->addToUrl('kader='.$objListe->name_id),
+						'name'          => ($objListe->nachname_alt.$objListe->vorname_alt) ? $objListe->vorname_alt.' '.$objListe->nachname_alt : $objListe->vorname.' '.$objListe->nachname,
+						'jahrgang'      => $objListe->jahrgang,
+						'verband_kurz'  => $objListe->landesverband,
+						'verband_lang'  => $GLOBALS['TL_LANG']['kaderlisten_landesverbaende'][$objListe->landesverband],
+						'hinweis'       => $objListe->note,
+						'fidetitel'     => $objListe->fidetitel,
+						'elo'           => $objListe->elo ? $objListe->elo : '',
+						'dwz'           => $objListe->dwz ? $objListe->dwz : '',
+						'vorjahr'       => isset($vorjahr[$objListe->name_id]) ? $vorjahr[$objListe->name_id] : 'neu'
+					);
+				}
 			}
 		}
 
 		$this->Template->head = array
 		(
-			'dwzSuffix' => $dwzSuffix ? ' '.$dwzSuffix : '',
-			'eloSuffix' => $eloSuffix ? ' '.$eloSuffix : ''
+			'dwzSuffix' => isset($dwzSuffix) ? ' '.$dwzSuffix : '',
+			'eloSuffix' => isset($eloSuffix) ? ' '.$eloSuffix : ''
 		);
 		$this->Template->visibleElo = $this->kaderliste_invisibleElo ? false : true;
 		$this->Template->visibleDWZ = $this->kaderliste_invisibleDWZ ? false : true;

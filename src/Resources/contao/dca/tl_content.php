@@ -3,7 +3,7 @@
 /**
  * Paletten
  */
-$GLOBALS['TL_DCA']['tl_content']['palettes']['kaderlisten'] = '{type_legend},type,headline;{kaderliste_legend},kaderliste_id,kaderliste_invisibleDWZ,kaderliste_invisibleElo;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['kaderlisten'] = '{type_legend},type,headline;{kaderliste_legend},kaderliste_id,kaderliste_invisibleDWZ,kaderliste_invisibleElo,kaderliste_stufen;{protected_legend:hide},protected;{expert_legend:hide},guest,cssID,space;{invisible_legend:hide},invisible,start,stop';
 
 /**
  * Felder
@@ -51,6 +51,23 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['kaderliste_invisibleElo'] = array
 		'tl_class'            => 'w50'
 	),
 	'sql'                     => "char(1) NOT NULL default ''"
+);
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['kaderliste_stufen'] = array
+(
+	'label'                => &$GLOBALS['TL_LANG']['tl_content']['kaderliste_stufen'],
+	'exclude'              => true,
+	'default'              => 'a:4:{i:0;s:1:"A";i:1;s:1:"B";i:2;s:1:"C";i:3;s:2:"DC";}',
+	'options'              => array('A', 'B', 'C', 'DC'),
+	'reference'            => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['type_lang'],
+	'inputType'            => 'checkboxWizard',
+	'eval'                 => array
+	(
+		'mandatory'        => false,
+		'multiple'         => true,
+		'tl_class'         => 'clr w50'
+	),
+	'sql'                  => "blob NULL",
 );
 
 /*****************************************

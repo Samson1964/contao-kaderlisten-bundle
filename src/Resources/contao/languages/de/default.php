@@ -22,3 +22,12 @@ $GLOBALS['TL_LANG']['kaderlisten_landesverbaende'] = array
 	'TH'  => 'Thüringen',
 	'WB'  => 'Württemberg'
 );
+
+// Optionslisten
+$GLOBALS['TL_LANG']['tl_kaderlisten_items']['type_lang'] = array
+(
+	'A'   => 'A-Kader',
+	'B'   => 'B-Kader',
+	'C'   => 'C-Kader',
+	'DC'  => 'DC-Kader'
+);

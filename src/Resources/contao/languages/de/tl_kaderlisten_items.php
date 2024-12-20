@@ -41,15 +41,6 @@ $GLOBALS['TL_LANG']['tl_kaderlisten_items']['comment'] = array('Kommentar', 'Int
 $GLOBALS['TL_LANG']['tl_kaderlisten_items']['publish_legend'] = 'Veröffentlichung';
 $GLOBALS['TL_LANG']['tl_kaderlisten_items']['published'] = array('Veröffentlicht', 'Spieler ist veröffentlicht');
 
-// Optionslisten
-$GLOBALS['TL_LANG']['tl_kaderlisten_items']['type_lang'] = array
-(
-	'A'   => 'A-Kader',
-	'B'   => 'B-Kader',
-	'C'   => 'C-Kader',
-	'DC'  => 'DC-Kader'
-);
-
 $GLOBALS['TL_LANG']['tl_kaderlisten_items']['fidetitel_list'] = array
 (
 	'CM'  => 'CM - Kandidatenmeister',
