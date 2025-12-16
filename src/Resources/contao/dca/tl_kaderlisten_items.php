@@ -135,10 +135,10 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'sorting'                 => true,
 			'flag'                    => 11,
 			'inputType'               => 'select',
-			'options'                 => array('A', 'B', 'C', 'DC'),
+			'options'                 => array('WK', 'PK', 'NK1', 'NK2', 'A', 'B', 'C', 'DC'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['type_lang'],
 			'eval'                    => array('submitOnChange'=>false,'tl_class'=>'w50'),
-			'sql'                     => "varchar(2) NOT NULL default ''"
+			'sql'                     => "varchar(3) NOT NULL default ''"
 		),
 		'nummer' => array
 		(

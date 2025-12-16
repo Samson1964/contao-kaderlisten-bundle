@@ -1,5 +1,10 @@
 # Kaderlisten Changelog
 
+## Version 1.5.0 (2025-12-16)
+
+* Add: Neue Kadertypen -> WK = Weltklassekader, PK = Perspektivkader, NK 1 = Nachwuchskader 1, NK 2 = Nachwuchskader 2
+* Change: tl_kaderlisten_items.type -> varchar(3) statt varchar(2)
+
 ## Version 1.4.3 (2024-12-20)
 
 * Add: tl_content.kaderlisten_stufen -> Nur bestimmte Kader ausgeben

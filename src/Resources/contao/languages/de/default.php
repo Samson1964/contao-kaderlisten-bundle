@@ -26,6 +26,10 @@ $GLOBALS['TL_LANG']['kaderlisten_landesverbaende'] = array
 // Optionslisten
 $GLOBALS['TL_LANG']['tl_kaderlisten_items']['type_lang'] = array
 (
+	'WK'  => 'Weltklassekader',
+	'PK'  => 'Perspektivkader',
+	'NK1' => 'Nachwuchskader 1',
+	'NK2' => 'Nachwuchskader 2',
 	'A'   => 'A-Kader',
 	'B'   => 'B-Kader',
 	'C'   => 'C-Kader',

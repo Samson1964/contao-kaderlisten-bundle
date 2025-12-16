@@ -57,8 +57,8 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['kaderliste_stufen'] = array
 (
 	'label'                => &$GLOBALS['TL_LANG']['tl_content']['kaderliste_stufen'],
 	'exclude'              => true,
-	'default'              => 'a:4:{i:0;s:1:"A";i:1;s:1:"B";i:2;s:1:"C";i:3;s:2:"DC";}',
-	'options'              => array('A', 'B', 'C', 'DC'),
+	'default'              => 'a:4:{i:0;s:2:"WK";i:1;s:2:"PK";i:2;s:3:"NK1";i:3;s:3:"NK2";}',
+	'options'              => array('WK', 'PK', 'NK1', 'NK2', 'A', 'B', 'C', 'DC'),
 	'reference'            => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['type_lang'],
 	'inputType'            => 'checkboxWizard',
 	'eval'                 => array
