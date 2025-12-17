@@ -82,16 +82,18 @@ class Kaderliste extends \ContentElement
 		                                               ki.nachname,
 		                                               ki.vorname")
 		                           ->execute($this->kaderliste_id, 1);
+		
+		// Kadertypen aus Inhaltselement laden
+		$kadertypen = unserialize($this->kaderliste_stufen);
+		if(count($kadertypen) == 0)
+		{
+			$kadertypen = array('A', 'B', 'C', 'DC');
+		}
+
 		// Liste generieren
 		$liste = array();
 		if($objListe)
 		{
-			$kadertypen = unserialize($this->kaderliste_stufen);
-			if(count($kadertypen) == 0)
-			{
-				$kadertypen = array('A', 'B', 'C', 'DC');
-			}
-			
 			while($objListe->next())
 			{
 				if(in_array($objListe->type, $kadertypen))
@@ -104,7 +106,7 @@ class Kaderliste extends \ContentElement
 						'name'          => ($objListe->nachname_alt.$objListe->vorname_alt) ? $objListe->vorname_alt.' '.$objListe->nachname_alt : $objListe->vorname.' '.$objListe->nachname,
 						'jahrgang'      => $objListe->jahrgang,
 						'verband_kurz'  => $objListe->landesverband,
-						'verband_lang'  => $GLOBALS['TL_LANG']['kaderlisten_landesverbaende'][$objListe->landesverband],
+						'verband_lang'  => $objListe->landesverband ? $GLOBALS['TL_LANG']['kaderlisten_landesverbaende'][$objListe->landesverband] : '',
 						'hinweis'       => $objListe->note,
 						'fidetitel'     => $objListe->fidetitel,
 						'elo'           => $objListe->elo ? $objListe->elo : '',
@@ -115,6 +117,19 @@ class Kaderliste extends \ContentElement
 			}
 		}
 
+		// Liste nach Kadertypen sortieren
+		$neuliste = array();
+		foreach($kadertypen as $kadertyp)
+		{
+			for($x = 0; $x < count($liste); $x++)
+			{
+				if($liste[$x]['kader'] == $kadertyp)
+				{
+					$neuliste[] = $liste[$x];
+				}
+			}
+		}
+		
 		$this->Template->head = array
 		(
 			'dwzSuffix' => isset($dwzSuffix) ? ' '.$dwzSuffix : '',
@@ -123,7 +138,7 @@ class Kaderliste extends \ContentElement
 		$this->Template->visibleElo = $this->kaderliste_invisibleElo ? false : true;
 		$this->Template->visibleDWZ = $this->kaderliste_invisibleDWZ ? false : true;
 		$this->Template->headline = $this->headline;
-		$this->Template->liste = $liste;
+		$this->Template->liste = $neuliste;
 		return;
 
 	}

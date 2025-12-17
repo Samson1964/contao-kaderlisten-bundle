@@ -1,5 +1,10 @@
 # Kaderlisten Changelog
 
+## Version 1.5.1 (2025-12-17)
+
+* Fix: Warning: Undefined array key "" in src/ContentElements/Kaderliste.php (line 107) -> wenn kein Landesverband definiert ist
+* Fix: Sortierung nach Kadertyp (WK, PK, A, B usw.) im Inhaltselement wird ignoriert
+
 ## Version 1.5.0 (2025-12-16)
 
 * Add: Neue Kadertypen -> WK = Weltklassekader, PK = Perspektivkader, NK 1 = Nachwuchskader 1, NK 2 = Nachwuchskader 2
