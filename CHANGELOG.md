@@ -1,5 +1,9 @@
 # Kaderlisten Changelog
 
+## Version 1.5.2 (2026-07-29)
+
+* Fix: Warning: Undefined array key "deleteConfirm", "kaderlisten_landesverbaende" bei contao:migrate -> Lesezugriffe auf $GLOBALS['TL_LANG'] in den DCA-Dateien mit `?? null` bzw. `?? array()` abgesichert, da der DcaLoader die Sprachdateien noch nicht geladen hat
+
 ## Version 1.5.1 (2025-12-17)
 
 * Fix: Warning: Undefined array key "" in src/ContentElements/Kaderliste.php (line 107) -> wenn kein Landesverband definiert ist

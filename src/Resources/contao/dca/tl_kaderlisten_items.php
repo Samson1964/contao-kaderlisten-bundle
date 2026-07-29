@@ -81,7 +81,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"'
+				'attributes'          => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null) . '\'))return false;Backend.getScrollOffset()"'
 			),
 			'toggle' => array
 			(
@@ -208,7 +208,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'exclude'                 => true,
 			'default'                 => '',
 			'inputType'               => 'select',
-			'options'                 => $GLOBALS['TL_LANG']['kaderlisten_landesverbaende'],
+			'options'                 => ($GLOBALS['TL_LANG']['kaderlisten_landesverbaende'] ?? array()),
 			'eval'                    => array
 			(
 				'tl_class'            => 'w50',
