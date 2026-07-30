@@ -1,7 +1,15 @@
 {
     "name": "schachbulle/contao-kaderlisten-bundle",
     "type": "contao-bundle",
-    "description": "Kaderlisten für Contao 4",
+    "description": "Verwaltet Kaderlisten von Spielern und gibt sie im Frontend aus.",
+    "keywords": [
+        "contao",
+        "schach",
+        "kader",
+        "spieler",
+        "liste"
+    ],
+    "homepage": "https://github.com/Samson1964/contao-kaderlisten-bundle",
     "license": "LGPL-3.0-or-later",
     "authors": [
         {
