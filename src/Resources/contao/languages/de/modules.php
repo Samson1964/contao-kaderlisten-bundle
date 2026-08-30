@@ -1,17 +1,14 @@
-<?php 
+<?php
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2014 Leo Feyer
+ * Kaderlisten für Contao Open Source CMS
  *
+ * @author    Frank Binding
+ * @license   LGPL-3.0-or-later
  */
 
 /**
- * Backend-Modul �bersetzungen
+ * Backend-Modul-Übersetzungen
  */
-$GLOBALS["TL_LANG"]["MOD"]["kaderlisten"][0] = "Kaderlisten";
-$GLOBALS["TL_LANG"]["MOD"]["kaderlisten"][1] = "Kaderlisten des Deutschen Schachbundes";
-
-/**
- * Frontendmodule
- */
+$GLOBALS['TL_LANG']['MOD']['kaderlisten'][0] = 'Kaderlisten';
+$GLOBALS['TL_LANG']['MOD']['kaderlisten'][1] = 'Kaderlisten des Deutschen Schachbundes';

@@ -10,21 +10,22 @@
 		<th>Name</th>
 		<th>Jg.</th>
 		<th>LV</th>
-		<?php if($this->visibleElo): ?><th>Elo<?= $this->head['eloSuffix'] ?></th><?php endif; ?>
-		<?php if($this->visibleDWZ): ?><th>DWZ<?= $this->head['dwzSuffix'] ?></th><?php endif; ?>
+		<?php if ($this->visibleElo): ?><th>Elo<?= $this->head['eloSuffix'] ?></th><?php endif; ?>
+		<?php if ($this->visibleDWZ): ?><th>DWZ<?= $this->head['dwzSuffix'] ?></th><?php endif; ?>
 		<th>davor</th>
 	</tr>
-	<?php foreach($this->liste as $item): ?>
-	<?php $class = isset($class) == 'odd' ? 'even' : 'odd'; ?>
+	<?php $class = 'even'; ?>
+	<?php foreach ($this->liste as $item): ?>
+	<?php $class = ($class === 'odd') ? 'even' : 'odd'; ?>
 	<tr class="<?= $class ?>">
 		<td><?= $item['kader'] ?></td>
 		<td><?= $item['nummer'] ?></td>
 		<td><?= $item['fidetitel'] ?></td>
-		<td><?php if($item['url']): ?><a href="<?= $item['url'] ?>"><?= $item['name'] ?></a><?php else: ?><?= $item['name'] ?><?php endif; ?><?php if($item['hinweis']): ?> (<?= $item['hinweis'] ?>)<? endif; ?></td>
+		<td><?php if ($item['url']): ?><a href="<?= $item['url'] ?>"><?= $item['name'] ?></a><?php else: ?><?= $item['name'] ?><?php endif; ?><?php if ($item['hinweis']): ?> (<?= $item['hinweis'] ?>)<?php endif; ?></td>
 		<td><?= $item['jahrgang'] ?></td>
 		<td title="<?= $item['verband_lang'] ?>"><?= $item['verband_kurz'] ?></td>
-		<?php if($this->visibleElo): ?><td><?= $item['elo'] ?></td><?php endif; ?>
-		<?php if($this->visibleDWZ): ?><td><?= $item['dwz'] ?></td><?php endif; ?>
+		<?php if ($this->visibleElo): ?><td><?= $item['elo'] ?></td><?php endif; ?>
+		<?php if ($this->visibleDWZ): ?><td><?= $item['dwz'] ?></td><?php endif; ?>
 		<td><?= $item['vorjahr'] ?></td>
 	</tr>
 	<?php endforeach; ?>

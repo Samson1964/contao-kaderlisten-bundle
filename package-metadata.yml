@@ -5,9 +5,36 @@
 de:
     title: Kaderlisten
     description: >
-        Verwaltet Kaderlisten von Spielern und gibt sie im Frontend aus.
+        Verwaltet Kaderlisten von Schachspielern und gibt sie als Inhaltselement
+        im Frontend aus. Zu jeder Liste gehören Jahr, Zeitraum und die Spieler
+        mit ihrer Kaderstufe, dem Landesverband, DWZ und Elo.
+
+        Die Spieler werden einmal angelegt und dann in beliebig vielen Listen
+        verwendet; auf Wunsch lassen sie sich mit dem Spielerregister verknüpfen.
+        Die Ausgabe nennt zu jedem Spieler auch die Kaderstufe des Vorjahres.
+        Welche Stufen erscheinen und ob DWZ und Elo sichtbar sind, legt das
+        Inhaltselement fest.
     keywords:
         - Schach
         - Kader
+        - Kaderliste
         - Spieler
         - Liste
+
+en:
+    title: Squad lists
+    description: >
+        Manages squad lists of chess players and outputs them as a content
+        element in the front end. Each list holds a year, a period of validity
+        and the players with their squad level, regional association, DWZ and
+        Elo rating.
+
+        Players are created once and can then be used in any number of lists;
+        they can optionally be linked to the player register. The output also
+        shows each player's squad level from the previous year. Which levels
+        appear and whether DWZ and Elo are visible is set per content element.
+    keywords:
+        - chess
+        - squad
+        - list
+        - players

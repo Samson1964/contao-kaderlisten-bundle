@@ -1,17 +1,21 @@
 <?php
 
 /**
- * Contao Open Source CMS
+ * Kaderlisten für Contao Open Source CMS
  *
- * Copyright (c) 2005-2014 Leo Feyer
- *
- * @package News
- * @link    https://contao.org
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @author    Frank Binding
+ * @license   LGPL-3.0-or-later
  */
 
+use Contao\Backend;
+use Contao\Database;
+use Contao\DataContainer;
+use Contao\DC_Table;
+use Contao\Image;
+use Contao\System;
+
 /**
- * Table tl_kaderlisten_namen
+ * Tabelle tl_kaderlisten_namen
  */
 $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 (
@@ -19,7 +23,8 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 	// Config
 	'config' => array
 	(
-		'dataContainer'               => 'Table',
+		// Ab Contao 5 ist nur noch der voll qualifizierte Klassenname erlaubt.
+		'dataContainer'               => DC_Table::class,
 		'switchToEdit'                => true,
 		'enableVersioning'            => true,
 		'sql' => array
@@ -36,8 +41,8 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 	(
 		'sorting' => array
 		(
-			'mode'                    => 2,
-			'flag'                    => 1,
+			'mode'                    => DataContainer::MODE_SORTABLE,
+			'flag'                    => DataContainer::SORT_INITIAL_LETTER_ASC,
 			'fields'                  => array('lastname ASC'),
 			'panelLayout'             => 'filter;sort,search,limit',
 		),
@@ -70,40 +75,33 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['edit'],
 				'href'                => 'act=edit',
-				'icon'                => 'edit.gif'
+				'icon'                => 'edit.svg'
 			),
 			'copy' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['copy'],
 				'href'                => 'act=paste&amp;mode=copy',
-				'icon'                => 'copy.gif'
+				'icon'                => 'copy.svg'
 			),
 			'delete' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['delete'],
 				'href'                => 'act=delete',
-				'icon'                => 'delete.gif',
+				'icon'                => 'delete.svg',
 				'attributes'          => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null) . '\'))return false;Backend.getScrollOffset()"'
 			),
+			// Umschalter des Kerns statt des Haste-Togglers, siehe tl_kaderlisten.
 			'toggle' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['toggle'],
-				'attributes'           => 'onclick="Backend.getScrollOffset()"',
-				'haste_ajax_operation' => array
-				(
-					'field'            => 'published',
-					'options'          => array
-					(
-						array('value' => '', 'icon' => 'invisible.svg'),
-						array('value' => '1', 'icon' => 'visible.svg'),
-					),
-				),
+				'href'                => 'act=toggle&amp;field=published',
+				'icon'                => 'visible.svg',
 			),
 			'show' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['show'],
 				'href'                => 'act=show',
-				'icon'                => 'show.gif'
+				'icon'                => 'show.svg'
 			)
 		)
 	),
@@ -131,7 +129,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 1,
+			'flag'                    => DataContainer::SORT_INITIAL_LETTER_ASC,
 			'inputType'               => 'text',
 			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
@@ -142,7 +140,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 1,
+			'flag'                    => DataContainer::SORT_INITIAL_LETTER_ASC,
 			'inputType'               => 'text',
 			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(255) NOT NULL default ''"
@@ -173,7 +171,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['spielerregister_id'],
 			'exclude'                 => true,
-			'options_callback'        => array('\Schachbulle\ContaoSpielerregisterBundle\Klassen\Helper', 'getRegister'),
+			'options_callback'        => array('Schachbulle\ContaoSpielerregisterBundle\Klassen\Helper', 'getRegister'),
 			'inputType'               => 'select',
 			'eval'                    => array
 			(
@@ -196,6 +194,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 		'published' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten_namen']['published'],
+			'toggle'                  => true,
 			'default'                 => 1,
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
@@ -207,49 +206,48 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_namen'] = array
 
 
 /**
- * Class tl_kaderlisten_namen
+ * Stellt die Callbacks des Data Containers tl_kaderlisten_namen bereit.
  *
- * Provide miscellaneous methods that are used by the data configuration array.
- * @copyright  Leo Feyer 2005-2014
- * @author     Leo Feyer <https://contao.org>
- * @package    News
+ * Die Klasse erbt von Contao\Backend statt vom früheren globalen Alias
+ * `Backend`, den Contao 5 nicht mehr registriert.
  */
 class tl_kaderlisten_namen extends Backend
 {
 
-	var $nummer = 0;
-
 	/**
-	 * Import the back end user object
+	 * Baut eine Tabelle mit allen Kaderlisten, in denen der Spieler steht.
+	 *
+	 * Die Tabelle wird als Ersatz für ein Eingabefeld eingeblendet und ist rein
+	 * informativ; sie speichert nichts. Jede Zeile trägt zwei Verknüpfungen, die
+	 * den betreffenden Listeneintrag beziehungsweise die Kaderliste selbst in
+	 * einem Modalfenster zum Bearbeiten öffnen.
+	 *
+	 * Die frühere Fallunterscheidung über die Konstante VERSION ist entfallen:
+	 * Contao 5 definiert sie nicht mehr, und der Zweig für Contao 3 wird nicht
+	 * mehr gebraucht. Ebenso ersetzt der CSRF-Dienst die Konstante
+	 * REQUEST_TOKEN, die es in Contao 5 ebenfalls nicht mehr gibt.
+	 *
+	 * @param DataContainer $dc     Data Container des bearbeiteten Spielers
+	 * @param string        $xlabel Zusatzbeschriftung des Kerns, wird nicht benutzt
+	 *
+	 * @return string HTML der Tabelle; bei einem Spieler ohne Kaderzugehörigkeit
+	 *                bleibt sie bis auf die Kopfzeile leer
 	 */
-	public function __construct()
+	public function getKader(DataContainer $dc, $xlabel = '')
 	{
-		parent::__construct();
-		$this->import('BackendUser', 'User');
-	}
+		$container = System::getContainer();
 
-	public function getKader(DataContainer $dc)
-	{
+		$linkprefix = $container->get('router')->generate('contao_backend');
+		$strToken = $container->get('contao.csrf.token_manager')->getDefaultTokenValue();
 
-		// Link-Prefixe generieren, ab C4 ist das ein symbolischer Link zu "contao"
-		if(version_compare(VERSION, '4.0', '>='))
-		{
-			$linkprefix = \System::getContainer()->get('router')->generate('contao_backend');
-			$imageEditHeader = \Image::getHtml('header.svg', 'Kaderliste %s bearbeiten');
-			$imageEdit = \Image::getHtml('edit.svg', 'Spielereintrag %s in der Kaderliste bearbeiten');
-		}
-		else
-		{
-			$linkprefix = 'contao/main.php';
-			$imageEditHeader = \Image::getHtml('header.gif', 'Kaderliste %s bearbeiten');
-			$imageEdit = \Image::getHtml('edit.gif', 'Spielereintrag %s in der Kaderliste bearbeiten');
-		}
+		$imageEditHeader = Image::getHtml('header.svg', 'Kaderliste %s bearbeiten');
+		$imageEdit = Image::getHtml('edit.svg', 'Spielereintrag %s in der Kaderliste bearbeiten');
 
-		$spieler_id = $dc->activeRecord->id;
+		$spieler_id = $dc->id;
 
-		$objRegister = $this->Database->prepare("SELECT k.id AS listen_id, k.year, k.type, k.title, i.fidetitel, i.elo, i.dwz, i.nachname, i.vorname, i.id AS item_id, i.type AS item_type FROM tl_kaderlisten_items AS i, tl_kaderlisten AS k WHERE i.pid = k.id AND i.name_id=? ORDER BY k.year DESC")
-		                              ->execute($spieler_id);
-		//$ausgabe = '<div class="tl_listing_container list_view">';
+		$objRegister = Database::getInstance()->prepare("SELECT k.id AS listen_id, k.year, k.type, k.title, i.fidetitel, i.elo, i.dwz, i.nachname, i.vorname, i.id AS item_id, i.type AS item_type FROM tl_kaderlisten_items AS i, tl_kaderlisten AS k WHERE i.pid = k.id AND i.name_id=? ORDER BY k.year DESC")
+		                                      ->execute($spieler_id);
+
 		$ausgabe = '<div class="long widget">'; // Wichtig damit das Auf- und Zuklappen funktioniert
 		$ausgabe .= '<table class="tl_listing showColumns">';
 		$ausgabe .= '<tbody><tr>';
@@ -262,43 +260,56 @@ class tl_kaderlisten_namen extends Backend
 		$ausgabe .= '<th class="tl_folder_tlist">DWZ</th>';
 		$ausgabe .= '<th class="tl_folder_tlist tl_right_nowrap">&nbsp;</th>';
 		$ausgabe .= '</tr>';
+
 		$oddeven = 'odd';
-		while($objRegister->next())
+
+		while ($objRegister->next())
 		{
-			$liste = $objRegister->year.'-'.strtoupper($objRegister->type);
+			$liste = $objRegister->year . '-' . strtoupper((string) $objRegister->type);
 			$oddeven = $oddeven == 'odd' ? 'even' : 'odd';
-			$ausgabe .= '<tr class="'.$oddeven.'" onmouseover="Theme.hoverRow(this,1)" onmouseout="Theme.hoverRow(this,0)">';
-			$ausgabe .= '<td class="tl_file_list">'.$liste.'</td>';
-			$ausgabe .= '<td class="tl_file_list">'.$objRegister->title.'</td>';
-			$ausgabe .= '<td class="tl_file_list">'.$objRegister->item_type.'</td>';
-			$ausgabe .= '<td class="tl_file_list">'.$objRegister->nachname . ',' . $objRegister->vorname.'</td>';
-			$ausgabe .= '<td class="tl_file_list">'.$objRegister->fidetitel.'</td>';
-			$ausgabe .= '<td class="tl_file_list">'.($objRegister->elo ? $objRegister->elo : '').'</td>';
-			$ausgabe .= '<td class="tl_file_list">'.($objRegister->dwz ? $objRegister->dwz : '').'</td>';
+
+			$ausgabe .= '<tr class="' . $oddeven . '" onmouseover="Theme.hoverRow(this,1)" onmouseout="Theme.hoverRow(this,0)">';
+			$ausgabe .= '<td class="tl_file_list">' . $liste . '</td>';
+			$ausgabe .= '<td class="tl_file_list">' . $objRegister->title . '</td>';
+			$ausgabe .= '<td class="tl_file_list">' . $objRegister->item_type . '</td>';
+			$ausgabe .= '<td class="tl_file_list">' . $objRegister->nachname . ',' . $objRegister->vorname . '</td>';
+			$ausgabe .= '<td class="tl_file_list">' . $objRegister->fidetitel . '</td>';
+			$ausgabe .= '<td class="tl_file_list">' . ($objRegister->elo ?: '') . '</td>';
+			$ausgabe .= '<td class="tl_file_list">' . ($objRegister->dwz ?: '') . '</td>';
 			$ausgabe .= '<td class="tl_file_list tl_right_nowrap">';
-			$ausgabe .= '<a href="'.$linkprefix.'?do=kaderlisten&amp;table=tl_kaderlisten_items&amp;act=edit&amp;id='.$objRegister->item_id.'&amp;popup=1&amp;rt='.REQUEST_TOKEN.'" onclick="Backend.openModalIframe({\'width\':768,\'title\':\'Eintrag '.$objRegister->item_id.' in Kaderliste '.$liste.' bearbeiten\',\'url\':this.href});return false">'.$imageEdit.'</a>';
-			$ausgabe .= '<a href="'.$linkprefix.'?do=kaderlisten&amp;table=tl_kaderlisten&amp;act=edit&amp;id='.$objRegister->listen_id.'&amp;popup=1&amp;rt='.REQUEST_TOKEN.'" onclick="Backend.openModalIframe({\'width\':768,\'title\':\'Kaderliste '.$liste.' bearbeiten\',\'url\':this.href});return false">'.$imageEditHeader.'</a>';
+			$ausgabe .= '<a href="' . $linkprefix . '?do=kaderlisten&amp;table=tl_kaderlisten_items&amp;act=edit&amp;id=' . $objRegister->item_id . '&amp;popup=1&amp;rt=' . $strToken . '" onclick="Backend.openModalIframe({\'width\':768,\'title\':\'Eintrag ' . $objRegister->item_id . ' in Kaderliste ' . $liste . ' bearbeiten\',\'url\':this.href});return false">' . $imageEdit . '</a>';
+			$ausgabe .= '<a href="' . $linkprefix . '?do=kaderlisten&amp;table=tl_kaderlisten&amp;act=edit&amp;id=' . $objRegister->listen_id . '&amp;popup=1&amp;rt=' . $strToken . '" onclick="Backend.openModalIframe({\'width\':768,\'title\':\'Kaderliste ' . $liste . ' bearbeiten\',\'url\':this.href});return false">' . $imageEditHeader . '</a>';
 			$ausgabe .= '</td>';
 			$ausgabe .= '</tr>';
 		}
+
 		$ausgabe .= '</tbody></table>';
 		$ausgabe .= '</div>';
-		return $ausgabe;
 
+		return $ausgabe;
 	}
 
 	/**
-	 * Listenansicht manipulieren
-	 * @param array
-	 * @param string
-	 * @param \DataContainer
-	 * @param array
-	 * @return string
+	 * Ersetzt zwei Spalten der Listenansicht durch besser lesbare Angaben.
+	 *
+	 * Ein fehlender Jahrgang wird als Strich dargestellt, und statt der reinen
+	 * ID aus dem Spielerregister erscheint ein Ja- beziehungsweise
+	 * Nein-Sinnbild, das die Zuordnung anzeigt.
+	 *
+	 * @param array         $row   Datensatz der Zeile
+	 * @param string        $label Vom Kern erzeugte Beschriftung
+	 * @param DataContainer $dc    Data Container der Listenansicht
+	 * @param array         $args  Die einzelnen Spaltenwerte in der Reihenfolge
+	 *                             von 'label' => 'fields'
+	 *
+	 * @return array Die geänderten Spaltenwerte; sie werden bei
+	 *               'showColumns' => true spaltenweise ausgegeben
 	 */
-	public function viewRecord($row, $label, \DataContainer $dc, $args)
+	public function viewRecord($row, $label, DataContainer $dc, $args)
 	{
-		$args[2] = $args[2] ? $args[2] : '-';
-		$args[3] = $args[3] ? '<img src="bundles/contaokaderlisten/images/ja.png">' : '<img src="bundles/contaokaderlisten/images/nein.png">';
+		$args[2] = $args[2] ?: '-';
+		$args[3] = $args[3] ? '<img src="bundles/contaokaderlisten/images/ja.png" alt="zugeordnet">' : '<img src="bundles/contaokaderlisten/images/nein.png" alt="nicht zugeordnet">';
+
 		return $args;
 	}
 

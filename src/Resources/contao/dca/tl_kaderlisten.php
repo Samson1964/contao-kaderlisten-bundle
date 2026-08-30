@@ -1,18 +1,17 @@
 <?php
 
 /**
- * Contao Open Source CMS
+ * Kaderlisten für Contao Open Source CMS
  *
- * Copyright (c) 2005-2014 Leo Feyer
- *
- * @package News
- * @link    https://contao.org
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @author    Frank Binding
+ * @license   LGPL-3.0-or-later
  */
 
+use Contao\DataContainer;
+use Contao\DC_Table;
 
 /**
- * Table tl_kaderlisten
+ * Tabelle tl_kaderlisten
  */
 $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 (
@@ -20,7 +19,9 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 	// Config
 	'config' => array
 	(
-		'dataContainer'               => 'Table',
+		// Ab Contao 5 ist nur noch der voll qualifizierte Klassenname erlaubt,
+		// der Kurzname 'Table' wird dort nicht mehr aufgelöst.
+		'dataContainer'               => DC_Table::class,
 		'ctable'                      => array('tl_kaderlisten_items'),
 		'switchToEdit'                => true,
 		'enableVersioning'            => true,
@@ -38,9 +39,9 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 	(
 		'sorting' => array
 		(
-			'mode'                    => 1,
+			'mode'                    => DataContainer::MODE_SORTED,
 			'fields'                  => array('year DESC', 'title ASC'),
-			'flag'                    => 1,
+			'flag'                    => DataContainer::SORT_INITIAL_LETTER_ASC,
 			'panelLayout'             => 'filter;sort,search,limit'
 		),
 		'label' => array
@@ -70,46 +71,41 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten']['edit'],
 				'href'                => 'table=tl_kaderlisten_items',
-				'icon'                => 'edit.gif'
+				'icon'                => 'edit.svg'
 			),
 			'editheader' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten']['editheader'],
 				'href'                => 'act=edit',
-				'icon'                => 'header.gif',
+				'icon'                => 'header.svg',
 			),
 			'copy' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten']['copy'],
 				'href'                => 'act=copy',
-				'icon'                => 'copy.gif',
+				'icon'                => 'copy.svg',
 			),
 			'delete' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten']['delete'],
 				'href'                => 'act=delete',
-				'icon'                => 'delete.gif',
+				'icon'                => 'delete.svg',
 				'attributes'          => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null) . '\'))return false;Backend.getScrollOffset()"',
 			),
+			// Umschalter des Kerns statt des Haste-Togglers: funktioniert ab
+			// Contao 4.13 und in Contao 5 unverändert, sobald das Feld
+			// 'published' mit 'toggle' => true gekennzeichnet ist.
 			'toggle' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten']['toggle'],
-				'attributes'           => 'onclick="Backend.getScrollOffset()"',
-				'haste_ajax_operation' => array
-				(
-					'field'            => 'published',
-					'options'          => array
-					(
-						array('value' => '', 'icon' => 'invisible.svg'),
-						array('value' => '1', 'icon' => 'visible.svg'),
-					),
-				),
+				'href'                => 'act=toggle&amp;field=published',
+				'icon'                => 'visible.svg',
 			),
 			'show' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten']['show'],
 				'href'                => 'act=show',
-				'icon'                => 'show.gif'
+				'icon'                => 'show.svg'
 			)
 		)
 	),
@@ -135,7 +131,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten']['year'],
 			'sorting'                 => true,
-			'flag'                    => 1,
+			'flag'                    => DataContainer::SORT_INITIAL_LETTER_ASC,
 			'inputType'               => 'text',
 			'default'                 => date('Y'),
 			'eval'                    => array('maxlength'=>4, 'tl_class'=>'w50'),
@@ -145,7 +141,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten']['title'],
 			'sorting'                 => true,
-			'flag'                    => 11,
+			'flag'                    => DataContainer::SORT_ASC,
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
@@ -156,7 +152,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten']['type'],
 			'sorting'                 => true,
-			'flag'                    => 11,
+			'flag'                    => DataContainer::SORT_ASC,
 			'inputType'               => 'radio',
 			'options'                 => array('m', 'w'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_kaderlisten']['type_lang'],
@@ -170,7 +166,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 			'exclude'                 => true,
 			'filter'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 8,
+			'flag'                    => DataContainer::SORT_MONTH_DESC,
 			'inputType'               => 'text',
 			'eval'                    => array('rgxp'=>'date', 'doNotCopy'=>true, 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
@@ -182,7 +178,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 			'exclude'                 => true,
 			'filter'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 8,
+			'flag'                    => DataContainer::SORT_MONTH_DESC,
 			'inputType'               => 'text',
 			'eval'                    => array('rgxp'=>'date', 'doNotCopy'=>true, 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
@@ -218,9 +214,10 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 		'published' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten']['published'],
+			'toggle'                  => true,
 			'exclude'                 => true,
 			'filter'                  => true,
-			'flag'                    => 1,
+			'flag'                    => DataContainer::SORT_INITIAL_LETTER_ASC,
 			'default'                 => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array
@@ -228,29 +225,10 @@ $GLOBALS['TL_DCA']['tl_kaderlisten'] = array
 				'doNotCopy'           => true
 			),
 			'sql'                     => "char(1) NOT NULL default ''"
-		),  
+		),
 	)
 );
 
-
-/**
- * Class tl_kaderlisten
- *
- * Provide miscellaneous methods that are used by the data configuration array.
- * @copyright  Leo Feyer 2005-2014
- * @author     Leo Feyer <https://contao.org>
- * @package    News
- */
-class tl_kaderlisten extends Backend
-{
-
-	/**
-	 * Import the back end user object
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->import('BackendUser', 'User');
-	}
-
-}
+// Eine Callback-Klasse tl_kaderlisten gibt es nicht mehr: Sie enthielt nur
+// einen Konstruktor, der das nirgends benutzte Backend-Benutzerobjekt
+// importierte. Der Data Container kommt ohne eigene Callbacks aus.

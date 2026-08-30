@@ -1,9 +1,11 @@
+# Dienstbeschreibung der Erweiterung
+#
+# Das Bundle registriert derzeit keine eigenen Dienste; die Callbacks stecken in
+# den klassischen DCA-Dateien. Die frühere _instanceof-Regel für
+# Symfony\Component\DependencyInjection\ContainerAwareInterface ist entfallen:
+# Diese Schnittstelle wurde in Symfony 7 entfernt, das unter Contao 5.7 läuft.
 services:
-    _instanceof:
-        Contao\CoreBundle\Framework\FrameworkAwareInterface:
-            calls:
-                - ["setFramework", ["@contao.framework"]]
-
-        Symfony\Component\DependencyInjection\ContainerAwareInterface:
-            calls:
-                - ["setContainer", ["@service_container"]]
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false

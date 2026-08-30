@@ -1,17 +1,19 @@
 <?php
 
 /**
- * Contao Open Source CMS
+ * Kaderlisten für Contao Open Source CMS
  *
- * Copyright (c) 2005-2014 Leo Feyer
- *
- * @package News
- * @link    https://contao.org
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @author    Frank Binding
+ * @license   LGPL-3.0-or-later
  */
 
+use Contao\Backend;
+use Contao\Database;
+use Contao\DataContainer;
+use Contao\DC_Table;
+
 /**
- * Table tl_kaderlisten_items
+ * Tabelle tl_kaderlisten_items
  */
 $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 (
@@ -19,11 +21,11 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 	// Config
 	'config' => array
 	(
-		'dataContainer'               => 'Table',
+		// Ab Contao 5 ist nur noch der voll qualifizierte Klassenname erlaubt.
+		'dataContainer'               => DC_Table::class,
 		'ptable'                      => 'tl_kaderlisten',
 		'switchToEdit'                => true,
 		'enableVersioning'            => true,
-		'onsubmit_callback'           => array(array('tl_kaderlisten_items', 'saveForm')),
 		'sql' => array
 		(
 			'keys' => array
@@ -39,7 +41,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 	(
 		'sorting' => array
 		(
-			'mode'                    => 4,
+			'mode'                    => DataContainer::MODE_PARENT,
 			'fields'                  => array('type ASC', 'nummer ASC', 'nachname ASC'),
 			'headerFields'            => array('year', 'title', 'fromDate', 'toDate'),
 			'panelLayout'             => 'filter;sort,search,limit',
@@ -62,46 +64,39 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['edit'],
 				'href'                => 'act=edit',
-				'icon'                => 'edit.gif'
+				'icon'                => 'edit.svg'
 			),
 			'copy' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['copy'],
 				'href'                => 'act=paste&amp;mode=copy',
-				'icon'                => 'copy.gif'
+				'icon'                => 'copy.svg'
 			),
 			'cut' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['cut'],
 				'href'                => 'act=paste&amp;mode=cut',
-				'icon'                => 'cut.gif'
+				'icon'                => 'cut.svg'
 			),
 			'delete' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['delete'],
 				'href'                => 'act=delete',
-				'icon'                => 'delete.gif',
+				'icon'                => 'delete.svg',
 				'attributes'          => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null) . '\'))return false;Backend.getScrollOffset()"'
 			),
+			// Umschalter des Kerns statt des Haste-Togglers, siehe tl_kaderlisten.
 			'toggle' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['toggle'],
-				'attributes'           => 'onclick="Backend.getScrollOffset()"',
-				'haste_ajax_operation' => array
-				(
-					'field'            => 'published',
-					'options'          => array
-					(
-						array('value' => '', 'icon' => 'invisible.svg'),
-						array('value' => '1', 'icon' => 'visible.svg'),
-					),
-				),
+				'href'                => 'act=toggle&amp;field=published',
+				'icon'                => 'visible.svg',
 			),
 			'show' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['show'],
 				'href'                => 'act=show',
-				'icon'                => 'show.gif'
+				'icon'                => 'show.svg'
 			)
 		)
 	),
@@ -133,7 +128,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['type'],
 			'sorting'                 => true,
-			'flag'                    => 11,
+			'flag'                    => DataContainer::SORT_ASC,
 			'inputType'               => 'select',
 			'options'                 => array('WK', 'PK', 'NK1', 'NK2', 'A', 'B', 'C', 'DC'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['type_lang'],
@@ -144,7 +139,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['nummer'],
 			'sorting'                 => true,
-			'flag'                    => 11,
+			'flag'                    => DataContainer::SORT_ASC,
 			'inputType'               => 'text',
 			'eval'                    => array('rgxp'=>'digit', 'maxlength'=>3, 'tl_class'=>'w50'),
 			'sql'                     => "int(3) unsigned NOT NULL default '0'"
@@ -172,13 +167,12 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 11,
+			'flag'                    => DataContainer::SORT_ASC,
 			'inputType'               => 'text',
 			'load_callback'           => array(array('tl_kaderlisten_items','loadVorname')),
-			//'save_callback'           => array(array('tl_kaderlisten_items','saveVorname')),
 			'eval'                    => array
 			(
-				'maxlength'           => 40, 
+				'maxlength'           => 40,
 				'alwaysSave'          => true,
 				'tl_class'            => 'w50'
 			),
@@ -190,13 +184,12 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
-			'flag'                    => 11,
+			'flag'                    => DataContainer::SORT_ASC,
 			'inputType'               => 'text',
 			'load_callback'           => array(array('tl_kaderlisten_items','loadNachname')),
-			//'save_callback'           => array(array('tl_kaderlisten_items','saveNachname')),
 			'eval'                    => array
 			(
-				'maxlength'           => 40, 
+				'maxlength'           => 40,
 				'alwaysSave'          => true,
 				'tl_class'            => 'w50'
 			),
@@ -208,7 +201,10 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 			'exclude'                 => true,
 			'default'                 => '',
 			'inputType'               => 'select',
-			'options'                 => ($GLOBALS['TL_LANG']['kaderlisten_landesverbaende'] ?? array()),
+			// Als Callback statt als feste 'options'-Liste: Beim Einlesen der
+			// DCA-Datei sind die Sprachdateien noch nicht zwingend geladen, die
+			// Auswahl wäre dann leer. Der Callback läuft erst beim Rendern.
+			'options_callback'        => array('tl_kaderlisten_items', 'getLandesverbaende'),
 			'eval'                    => array
 			(
 				'tl_class'            => 'w50',
@@ -264,6 +260,7 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 		'published' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_kaderlisten_items']['published'],
+			'toggle'                  => true,
 			'default'                 => 1,
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
@@ -275,125 +272,168 @@ $GLOBALS['TL_DCA']['tl_kaderlisten_items'] = array
 
 
 /**
- * Class tl_kaderlisten_items
+ * Stellt die Callbacks des Data Containers tl_kaderlisten_items bereit.
  *
- * Provide miscellaneous methods that are used by the data configuration array.
- * @copyright  Leo Feyer 2005-2014
- * @author     Leo Feyer <https://contao.org>
- * @package    News
+ * Die Klasse erbt von Contao\Backend statt vom früheren globalen Alias
+ * `Backend`, den Contao 5 nicht mehr registriert.
  */
 class tl_kaderlisten_items extends Backend
 {
 
-	var $nummer = 0;
-
 	/**
-	 * Import the back end user object
+	 * Baut die Beschriftung eines Spielereintrags in der Listenansicht.
+	 *
+	 * Ausgegeben werden Kaderstufe, laufende Nummer und Name. Dahinter steht,
+	 * ob der Eintrag einem registrierten Spieler zugeordnet ist: ein Häkchen,
+	 * wenn der im Eintrag hinterlegte Name mit dem des registrierten Spielers
+	 * übereinstimmt, sonst ein Kreuz. Unveröffentlichte Einträge werden rot
+	 * dargestellt.
+	 *
+	 * @param array $arrRow Datensatz der Zeile aus tl_kaderlisten_items
+	 *
+	 * @return string HTML des Listeneintrags
 	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->import('BackendUser', 'User');
-	}
-
-	/**
-	 * Return the link picker wizard
-	 * @param \DataContainer
-	 * @return string
-	 */
-	public function pagePicker(DataContainer $dc)
-	{
-		return ' <a href="contao/page.php?do=' . Input::get('do') . '&amp;table=' . $dc->table . '&amp;field=' . $dc->field . '&amp;value=' . str_replace(array('{{link_url::', '}}'), '', $dc->value) . '" title="' . specialchars($GLOBALS['TL_LANG']['MSC']['pagepicker']) . '" onclick="Backend.getScrollOffset();Backend.openModalSelector({\'width\':765,\'title\':\'' . specialchars(str_replace("'", "\\'", $GLOBALS['TL_LANG']['MOD']['page'][0])) . '\',\'url\':this.href,\'id\':\'' . $dc->field . '\',\'tag\':\'ctrl_'. $dc->field . ((Input::get('act') == 'editAll') ? '_' . $dc->id : '') . '\',\'self\':this});return false">' . Image::getHtml('pickpage.gif', $GLOBALS['TL_LANG']['MSC']['pagepicker'], 'style="vertical-align:top;cursor:pointer"') . '</a>';
-	}
-
 	public function listPersons($arrRow)
 	{
-		//echo "<pre>";
-		//print_r($arrRow);
-		//echo "</pre>";
 		$unpublished = $arrRow['published'] ? '' : 'color:#c33;';
-		$temp = '<div class="tl_content_left" style="'.$unpublished.'"><b style="'.$unpublished.'">'.$arrRow['type'].'</b>';
-		$temp .= ' <b style="'.$unpublished.'">'.$arrRow['nummer'].'</b>';
+		$temp = '<div class="tl_content_left" style="' . $unpublished . '"><b style="' . $unpublished . '">' . $arrRow['type'] . '</b>';
+		$temp .= ' <b style="' . $unpublished . '">' . $arrRow['nummer'] . '</b>';
 
-		if($arrRow['nachname']) $temp .= ' - '.$arrRow['nachname'].','.$arrRow['vorname'];
-		else $temp .= ' ---';
-
-		if($arrRow['name_id'])
+		if ($arrRow['nachname'])
 		{
-			$objRegister = $this->Database->prepare("SELECT * FROM tl_kaderlisten_namen WHERE id=?")->execute($arrRow['name_id']);
-			if($objRegister->lastname == $arrRow['nachname'] && $objRegister->firstname == $arrRow['vorname'])
-				$temp .= ' (<img src="bundles/contaokaderlisten/images/check.png" width="12"> '.$objRegister->lastname.','.$objRegister->firstname.' zugeordnet)';
-			else
-				$temp .= ' (<img src="bundles/contaokaderlisten/images/remove.png" width="12"> '.$objRegister->lastname.','.$objRegister->firstname.' zugeordnet)';
+			$temp .= ' - ' . $arrRow['nachname'] . ',' . $arrRow['vorname'];
 		}
 		else
+		{
+			$temp .= ' ---';
+		}
+
+		if ($arrRow['name_id'])
+		{
+			$objRegister = Database::getInstance()->prepare("SELECT * FROM tl_kaderlisten_namen WHERE id=?")
+			                                      ->execute($arrRow['name_id']);
+
+			if ($objRegister->lastname == $arrRow['nachname'] && $objRegister->firstname == $arrRow['vorname'])
+			{
+				$temp .= ' (<img src="bundles/contaokaderlisten/images/check.png" width="12"> ' . $objRegister->lastname . ',' . $objRegister->firstname . ' zugeordnet)';
+			}
+			else
+			{
+				$temp .= ' (<img src="bundles/contaokaderlisten/images/remove.png" width="12"> ' . $objRegister->lastname . ',' . $objRegister->firstname . ' zugeordnet)';
+			}
+		}
+		else
+		{
 			$temp .= ' (<img src="bundles/contaokaderlisten/images/remove.png" width="12"> niemand zugeordnet)';
+		}
 
 		// FIDE-Titel, Elo und DWZ ausgeben
-		if($arrRow['fidetitel']) $temp .= ' | <span>'.$arrRow['fidetitel'].'</span>';
-		if($arrRow['elo']) $temp .= ' |  <span>Elo '.$arrRow['elo'].'</span>';
-		if($arrRow['dwz']) $temp .= ' |  <span>DWZ '.$arrRow['dwz'].'</span>';
+		if ($arrRow['fidetitel'])
+		{
+			$temp .= ' | <span>' . $arrRow['fidetitel'] . '</span>';
+		}
 
-		return $temp.'</div>';
+		if ($arrRow['elo'])
+		{
+			$temp .= ' |  <span>Elo ' . $arrRow['elo'] . '</span>';
+		}
+
+		if ($arrRow['dwz'])
+		{
+			$temp .= ' |  <span>DWZ ' . $arrRow['dwz'] . '</span>';
+		}
+
+		return $temp . '</div>';
 	}
 
+	/**
+	 * Liefert die Auswahlliste aller registrierten Spieler.
+	 *
+	 * @param DataContainer $dc Data Container des bearbeiteten Eintrags,
+	 *                          wird nicht ausgewertet
+	 *
+	 * @return array Zuordnung "ID des registrierten Spielers" => "Vorname
+	 *               Nachname (Jahrgang)"; leer, wenn noch niemand registriert ist
+	 */
 	public function getNamenliste(DataContainer $dc)
 	{
 		$array = array();
-		$objRegister = $this->Database->prepare("SELECT * FROM tl_kaderlisten_namen ORDER BY lastname,firstname ASC ")->execute();
-		$array = array();
-		while($objRegister->next())
-		{
-			//$array[] = array($objRegister->id => $objRegister->firstname.' '.$objRegister->lastname.' ('.$objRegister->birthyear.')');
-			$array[$objRegister->id] = $objRegister->firstname.' '.$objRegister->lastname.' ('.$objRegister->birthyear.')';
-		}
-		return $array;
 
+		$objRegister = Database::getInstance()->prepare("SELECT * FROM tl_kaderlisten_namen ORDER BY lastname, firstname ASC")
+		                                      ->execute();
+
+		while ($objRegister->next())
+		{
+			$array[$objRegister->id] = $objRegister->firstname . ' ' . $objRegister->lastname . ' (' . $objRegister->birthyear . ')';
+		}
+
+		return $array;
 	}
 
+	/**
+	 * Liefert die Auswahlliste der Landesverbände.
+	 *
+	 * Die Bezeichnungen stammen aus der Sprachdatei default.php. Der Umweg über
+	 * einen Callback ist nötig, weil die Sprachdateien beim Einlesen der
+	 * DCA-Datei noch nicht geladen sein müssen — etwa bei contao:migrate.
+	 *
+	 * @param DataContainer|null $dc Data Container des bearbeiteten Eintrags,
+	 *                               wird nicht ausgewertet
+	 *
+	 * @return array Zuordnung "Kürzel" => "Name des Landesverbandes"; leer, wenn
+	 *               die Sprachdatei nicht geladen werden konnte
+	 */
+	public function getLandesverbaende($dc = null)
+	{
+		return $GLOBALS['TL_LANG']['kaderlisten_landesverbaende'] ?? array();
+	}
+
+	/**
+	 * Übernimmt den Vornamen des zugeordneten Spielers, wenn das Feld leer ist.
+	 *
+	 * @param mixed         $varValue Bisheriger Feldwert
+	 * @param DataContainer $dc       Data Container des bearbeiteten Eintrags
+	 *
+	 * @return mixed Der unveränderte Wert, oder der Vorname aus
+	 *               tl_kaderlisten_namen, wenn das Feld leer war und ein
+	 *               registrierter Spieler zugeordnet ist
+	 */
 	public function loadVorname($varValue, DataContainer $dc)
 	{
-		// Füllt Vorname aus, wenn leer und ein Spieler ausgewählt wurde
-		if($dc->activeRecord->name_id && trim($varValue) == '')
+		if ($dc->activeRecord->name_id && trim((string) $varValue) === '')
 		{
-			$objRegister = $this->Database->prepare("SELECT * FROM tl_kaderlisten_namen WHERE id = ?")
-			                              ->limit(1)
-			                              ->execute($dc->activeRecord->name_id);
+			$objRegister = Database::getInstance()->prepare("SELECT * FROM tl_kaderlisten_namen WHERE id = ?")
+			                                      ->limit(1)
+			                                      ->execute($dc->activeRecord->name_id);
+
 			$varValue = $objRegister->firstname;
 		}
-		
+
 		return $varValue;
 	}
 
-	public function saveVorname($varValue, DataContainer $dc)
-	{
-		return $varValue.' ';
-	}
-
+	/**
+	 * Übernimmt den Nachnamen des zugeordneten Spielers, wenn das Feld leer ist.
+	 *
+	 * @param mixed         $varValue Bisheriger Feldwert
+	 * @param DataContainer $dc       Data Container des bearbeiteten Eintrags
+	 *
+	 * @return mixed Der unveränderte Wert, oder der Nachname aus
+	 *               tl_kaderlisten_namen, wenn das Feld leer war und ein
+	 *               registrierter Spieler zugeordnet ist
+	 */
 	public function loadNachname($varValue, DataContainer $dc)
 	{
-		// Füllt Nachname aus, wenn leer und ein Spieler ausgewählt wurde
-		if($dc->activeRecord->name_id && trim($varValue) == '')
+		if ($dc->activeRecord->name_id && trim((string) $varValue) === '')
 		{
-			$objRegister = $this->Database->prepare("SELECT * FROM tl_kaderlisten_namen WHERE id = ?")  
-			                              ->limit(1)
-			                              ->execute($dc->activeRecord->name_id);
+			$objRegister = Database::getInstance()->prepare("SELECT * FROM tl_kaderlisten_namen WHERE id = ?")
+			                                      ->limit(1)
+			                                      ->execute($dc->activeRecord->name_id);
+
 			$varValue = $objRegister->lastname;
 		}
 
 		return $varValue;
-	}
-
-	public function saveNachname($varValue, DataContainer $dc)
-	{
-		return $varValue.' ';
-	}
-
-	public function saveForm(DataContainer $dc)
-	{
-		log_message('function saveForm','kaderlisten.log');
-		log_message(print_r($dc->activeRecord, true),'kaderlisten.log');
-		return;
 	}
 
 }

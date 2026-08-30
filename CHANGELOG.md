@@ -1,5 +1,27 @@
 # Kaderlisten Changelog
 
+## Version 2.0.0 (2026-08-30)
+
+* Add: Contao 5 wird unterstützt, die Erweiterung läuft jetzt unter Contao 4.13 und Contao 5 mit PHP 8.1 bis 8.4
+* Change: `composer.json` -> `contao/core-bundle: ^4.13 || ^5.0` und `php: ^8.1`; die Abhängigkeit `codefog/contao-haste` und die tote Entwicklungsabhängigkeit `doctrine/doctrine-cache-bundle` sind entfallen
+* Change: Umschalter „veröffentlicht“ in tl_kaderlisten, tl_kaderlisten_items und tl_kaderlisten_namen läuft über den Kern (`act=toggle&field=published` samt `'toggle' => true` am Feld) statt über den Haste-Toggler
+* Change: `'dataContainer' => DC_Table::class` statt des Kurznamens `'Table'`, den Contao 5 nicht mehr auflöst
+* Change: Alle Klassen werden voll qualifiziert angesprochen (`Contao\Backend`, `Contao\DataContainer`, `Contao\Database`, `Contao\Image`, `Contao\System`, `Contao\ContentElement`); Contao 5 kennt die globalen Klassenaliasse nicht mehr
+* Change: Zahlenwerte für `mode` und `flag` durch die Konstanten von `DataContainer` ersetzt, Symbole von `.gif` auf `.svg` umgestellt
+* Change: Landesverbände kommen über `options_callback` statt über eine feste `options`-Liste, damit die Auswahl auch dann gefüllt ist, wenn die Sprachdateien beim Einlesen des Data Containers noch nicht geladen sind
+* Change: `tl_content.php` lädt die Sprachdatei `tl_kaderlisten_items` nach, damit die Bezeichnungen der Kaderstufen im Inhaltselement erscheinen
+* Fix: Fatal error unter Contao 5, weil `src/Resources/contao/config/config.php` mit `if (!defined('TL_ROOT')) die(...)` begann — die Konstante gibt es dort nicht mehr
+* Fix: Fatal error in der Kaderübersicht eines registrierten Spielers unter Contao 5: Die Konstanten `VERSION` und `REQUEST_TOKEN` sind entfallen, das Sicherheitsmerkmal kommt jetzt aus `contao.csrf.token_manager`
+* Fix: `onsubmit_callback` in tl_kaderlisten_items entfernt; er schrieb nur über `log_message()` ins Protokoll, und diese Funktion gibt es in Contao 5 nicht mehr
+* Fix: Parse error im Template `ce_kaderliste.html5` -> der Hinweis hinter dem Namen wurde mit der kurzen Auszeichnung `<? endif; ?>` beendet, die nur bei eingeschaltetem `short_open_tag` funktioniert
+* Fix: Fatal error „count(): Argument #1 must be of type Countable|array, bool given“ im Inhaltselement, wenn keine Kaderstufe ausgewählt war -> `StringUtil::deserialize()` statt `unserialize()`
+* Fix: Zeilen der Kaderliste im Frontend wechselten die Farbe nicht -> `isset($class) == 'odd'` lieferte immer denselben Wert
+* Fix: Palette des Inhaltselements enthielt die Felder `guest` und `space` aus Contao 3, die es weder in 4.13 noch in 5 gibt
+* Fix: Sprachdatei `modules.php` war nicht UTF-8-kodiert
+* Change: `services.yml` verweist nicht mehr auf `Symfony\Component\DependencyInjection\ContainerAwareInterface`, das in Symfony 7 (Contao 5.7) entfernt wurde
+* Change: Toter Code entfernt — `pagePicker()` aus Contao 2, die ungenutzten Callbacks `saveVorname()`/`saveNachname()` sowie die leere Callback-Klasse `tl_kaderlisten`
+* Change: Alle Funktionen und Methoden mit deutschen Kommentarblöcken versehen
+
 ## Version 1.5.2 (2026-07-29)
 
 * Fix: Warning: Undefined array key "deleteConfirm", "kaderlisten_landesverbaende" bei contao:migrate -> Lesezugriffe auf $GLOBALS['TL_LANG'] in den DCA-Dateien mit `?? null` bzw. `?? array()` abgesichert, da der DcaLoader die Sprachdateien noch nicht geladen hat
