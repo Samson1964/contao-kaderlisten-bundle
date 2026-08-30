@@ -11,7 +11,7 @@ de:
 
         Die Spieler werden einmal angelegt und dann in beliebig vielen Listen
         verwendet; auf Wunsch lassen sie sich mit dem Spielerregister verknüpfen.
-        Die Ausgabe nennt zu jedem Spieler auch die Kaderstufe des Vorjahres.
+        Die Ausgabe nennt zu jedem Spieler auch seine Kaderstufe im Jahr davor.
         Welche Stufen erscheinen und ob DWZ und Elo sichtbar sind, legt das
         Inhaltselement fest.
     keywords:
